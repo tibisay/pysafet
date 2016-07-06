@@ -1819,13 +1819,13 @@ QString MainWindow::generateFormHead(const QString& o) {
 
                 result += QString("\n"
                         " myval = $('#%2 option%1').val();\n"
+                        " //console.log('myval:' + myval);\n"
+                        " // $('#id').val(myval).change();\n"
                         " console.log('myval:' + myval);\n"
-                        " $('#id').val(myval).change();\n"
-                        " console.log('myval:' + myval);\n"
-                          " console.log('CKOBJ:' + CKOBJ);\n"
-                          " console.log('CKVALUE:' + CKVALUE);\n"
-                         "setTimeout(function(){ "
-                         " if (CKOBJ != null) CKOBJ.setData(CKVALUE); }, 1000); \n"
+                          "// console.log('CKOBJ:' + CKOBJ);\n"
+                          "// console.log('CKVALUE:' + CKVALUE);\n"
+                         " // setTimeout(function(){ \n"
+                         " // if (CKOBJ != null) CKOBJ.setData(CKVALUE); }, 1000); \n"
                         )
                         .arg(myvalue)
                         .arg(myfirsfield);
@@ -2057,6 +2057,14 @@ QString MainWindow::formFieldsForKey(const QString& o, const QString& fieldname,
 
         CmdWidget* mywidget = mymodel->selWidgetFromField(cmd,trimfield,"",form);
 
+        if (mywidget == NULL ) {
+            SYD << tr("myWidget is NULL....cmd:|%1|...trimfield:|%2|")
+                   .arg(cmd)
+                   .arg(trimfield);
+
+            continue;
+        }
+
         QString newitem;
         SYD << tr("............**MainWindow::formFieldsForKey............(0)...");
         if (mywidget == NULL ) {
@@ -2083,6 +2091,10 @@ QString MainWindow::formFieldsForKey(const QString& o, const QString& fieldname,
                     contains(fieldname)) {
                 continue;
             }
+            SYD << tr("MainWindow::formFieldsForKey....CHANGEFOR...newitem...1");
+
+
+
             newitem = QString("%3: %1%2\n")
                   .arg(mywidget->htmlForKey(keyvalue, otherkey))
                    .arg(SafetYAWL::LISTHTMLSEPARATOR)
@@ -2090,8 +2102,12 @@ QString MainWindow::formFieldsForKey(const QString& o, const QString& fieldname,
                 SYD << tr("MainWindow::formFieldsForKey....CHANGEFOR....newitem:|%1|")
                           .arg(newitem);
 
+            SYD << tr("MainWindow::formFieldsForKey....CHANGEFOR...newitem...2");
+
+
 
         }
+        SYD << tr("MainWindow::formFieldsForKey....CHANGEFOR...newitem...3");
           result += newitem;
 
 
@@ -2099,6 +2115,7 @@ QString MainWindow::formFieldsForKey(const QString& o, const QString& fieldname,
     if (result.count() > SafetYAWL::LISTSEPARATORCHARACTER.count()) {
         //result.chop(SafetYAWL::LISTSEPARATORCHARACTER.count());
     }
+    SYD << tr("MainWindow::formFieldsForKey....CHANGEFOR...newitem...4");
     return result;
 
 }
