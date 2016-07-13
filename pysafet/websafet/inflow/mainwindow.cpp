@@ -1818,10 +1818,10 @@ QString MainWindow::generateFormHead(const QString& o) {
                 SYD << tr("........generateFormHead...**firstvalue");
 
                 result += QString("\n"
-                        " myval = $('#%2 option%1').val();\n"
+                        " //myval = $('#%2 option%1').val();\n"
                         " //console.log('myval:' + myval);\n"
                         " // $('#id').val(myval).change();\n"
-                        " console.log('myval:' + myval);\n"
+                        " //console.log('myval:' + myval);\n"
                           "// console.log('CKOBJ:' + CKOBJ);\n"
                           "// console.log('CKVALUE:' + CKVALUE);\n"
                          " // setTimeout(function(){ \n"
