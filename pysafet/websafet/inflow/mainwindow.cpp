@@ -39,7 +39,6 @@
 
 
 
-
 //#include <QCloseEvent>
 #include <QGraphicsSvgItem>
 //#include <QToolBar>
@@ -1613,8 +1612,8 @@ QString MainWindow::generateFormHead(const QString& o) {
                           "    op:document.getElementById(\"safetoperation\").value,\n"
                           "    modname:\"%3\",\n"
                           "    primary:this.id,\n"
-                          "    formstring: genFormString(document.forms[0]),\n"
-                          "   formkey: document.forms[0].elements[1].value},\n"
+                          "    formstring: genFormString(document.forms[1]),\n"
+                          "   formkey: document.forms[1].elements[1].value},\n"
                           " function(data)"
                           " {\n"
                           "  console.log(\"*data: \"+data);\n"
@@ -1905,9 +1904,10 @@ QString MainWindow::generateModifyHTML(const QString& operation, const QString& 
                || operation == "agregar_publicación"
                || (operation == "modificar_publicación" && fieldname == "Categoría")
                || (operation == "modificar_publicación" && fieldname == "SubCategoria")
+               || (operation == "Modificar_solicitud_vacaciones" && fieldname == "dias_solicitados")
                || (operation == "modificar_publicación" && fieldname == "SubCategoría")) {
 
-        SYD << tr("......MainWindow::generateModifyHTML.***EVALUATING...ADD_PUBLICATION");
+        SYD << tr(".....MODIFY_VACATION_.MainWindow::generateModifyHTML.***EVALUATING...ADD_PUBLICATION");
 
         SYD << tr("......MainWindow::generateModifyHTML.(sub)...EVALUATING: ....KEY:|%1|")
                .arg(key);

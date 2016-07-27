@@ -205,13 +205,21 @@ QString DateTimeWidget::html() {
                 "\n\n"
                 "<script  type=\"text/javascript\">\n"
                 "$(function() {"
-                "$( \"#%1\" ).datepicker({"
-                "   showOtherMonths: true,"
-                "   selectOtherMonths: true"
-                "});"
-                "$.datepicker.setDefaults($.datepicker.regional['es']);\n"
+                "     $( \"#%1\" ).datepicker( $.datepicker.regional['es']);"
                 "});"
                 "</script>\n"
+
+//                "\n\n"
+//                "<script  type=\"text/javascript\">\n"
+//                "$(function() {"
+//                "$( \"#%1\" ).datepicker({"
+//                "   showOtherMonths: true,"
+//                "   selectOtherMonths: true"
+//                "});"
+//                "$.datepicker.setDefaults($.datepicker.regional['fr']);\n"
+//                "});"
+//                "</script>\n"
+
                 )
             .arg(caption());
     }
@@ -249,24 +257,30 @@ QString DateTimeWidget::htmlForKey(const QString& k, const QString& otherk) {
             break;
         }
     }
+    SYD << tr("..........................**DateTimeWidget....before.............(1)....");
     if (beforef.isEmpty()) {
         return result;
     }
 
     QStringList myformlist;
+    SYD << tr("..........................**DateTimeWidget....before.............(2)...INCLUDE_FORMSTRING:|%1|")
+           .arg(conf().contains("formstring"));
+
     if (conf().contains("formstring")) {
-//        SYD << tr("..........................**DateTimeWidget::htmlForKey**.................(1)....");
+        SYD << tr("..........................**DateTimeWidget....before.............(3)....");
         myformlist = conf()["formstring"].toStringList();
-//        SYD << tr("..DateTimeWidget::htmlForKey........formstring:|%1|").arg(myformlist.join(";"));
+        SYD << tr("..DateTimeWidget::htmlForKey........formstring:|%1|").arg(myformlist.join(";"));
         myformlist.append(QString("keyvalue0:%1").arg(k));
         myformlist.append(QString("keyvalue1:%1").arg(otherk));
 
+        SYD << tr("..DateTimeWidget::htmlForKey........_format:|%1|").arg(_format);
 
         foreach(QString f, myformlist) {
             QString mypattern = QString("{#%1}").arg(f.split(":").at(0));
 
             if (f.split(":").count()>1) {
                 QString myvalue = f.split(":").at(1);
+                SYD << tr("..DateTimeWidget::htmlForKey........_date...1:|%1|").arg(myvalue);
                 QDateTime mydate = QDateTime::fromString(myvalue,Safet::DateOnlyFormat);
                 if (mydate.isValid() ) {
                     if ( _format == "time_t" ) {
@@ -282,6 +296,7 @@ QString DateTimeWidget::htmlForKey(const QString& k, const QString& otherk) {
                     }
 
                 }
+                SYD << tr("..DateTimeWidget::htmlForKey........_date..2:|%1|").arg(myvalue);
 
                 beforef.replace(mypattern,myvalue);
             }
@@ -290,10 +305,17 @@ QString DateTimeWidget::htmlForKey(const QString& k, const QString& otherk) {
             }
 
         }
+        SYD << tr("..........................**DateTimeWidget....before.............(4)....");
 
     }
+    SYD << tr("..........................**DateTimeWidget....before.............(5)....");
 
+
+       SYD << tr("..........................DateTimeWidget::beforef......:|%1|")
+              .arg(beforef);
        result = execBeforeFunction(beforef);
+       SYD << tr("..........................**DateTimeWidget....before.............(6).result:|%1|")
+              .arg(result);
 
 
 
@@ -415,6 +437,7 @@ QString DateTimeWidget::execBeforeFunction(const QString& op) {
     QString myop = op.mid(QString("beforefunction:").length());
 
 
+    SYD << tr(".....DateTimeWidget::execBeforeFunction.....(1)...op:|%1|").arg(myop);
     myop = processInternalFunction(myop);
 
     QString mysql = "SELECT "+ myop;
