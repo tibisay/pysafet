@@ -49,7 +49,7 @@ QString CmdWidget::html() {
     QString result;
 
     QString mydesc;
-    QString readonly;
+    QString readonly = "";
     QString curraction;
     QString fieldsaction;
     QStringList options = conf()["options"].toString().split(",");
@@ -461,17 +461,22 @@ QString CmdWidget::html() {
                 if (posaction == 1 || posaction == 3) {
                     result += "\n<div class=\"row clearfix\">\n";
                 }
+                SYD << tr("...READONLY:|%1|")
+                       .arg(readonly);
 
                  result += QString(""
                                "<div class=\"col-%4 column \">\n"
-                                "%5\n"
-                                "<input %2 class=\"form-control\" id=\"%1\" name=\"%1\" %3  >\n"
+                                "%6\n"
+                                "<input %2  class=\"form-control\" id=\"%1\" name=\"%1\" %3 %5 >\n"
                                "</div>\n")
                             .arg(_caption)
                             .arg(_typeinput)
                             .arg(mydesc.isEmpty()?"":QString("placeholder=\"%1\"").arg(mydesc))
                             .arg(poscol)
-                            .arg((removelabel?"":QString("<label for=\"%1\" class=\"col-md-2 control-label\">%2</label>\n").arg(_caption).arg(newcaption)));
+                            .arg(readonly)
+                            .arg((removelabel?"":QString("<label for=\"%1\" class=\"col-md-2 control-label\">%2</label>\n")
+                                              .arg(_caption).arg(newcaption)));
+
 
 
                 if (posaction == 2 || posaction ==  3) {
@@ -485,13 +490,15 @@ QString CmdWidget::html() {
                 QString(""
                           "<div class=\"form-group\" >"
                           "<label for=\"%1\" class=\"col-md-1 control-label\">%4</label>"
-                          "<input %2 class=\"form-control\" id=\"%1\" name=\"%1\" %3  >"
+                          "<input %2 class:q"
+                        "= \"form-control\" id=\"%1\" name=\"%1\" %3  %5 >"
                         "</div>"
                         )
                 .arg(_caption)
                 .arg(_typeinput)
                 .arg(mydesc.isEmpty()?"":QString("placeholder=\"%1\"").arg(mydesc))
-                .arg(newcaption.replace("_"," "));
+                .arg(newcaption.replace("_"," "))
+                .arg(readonly);
 
         }
 
