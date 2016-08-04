@@ -38,7 +38,6 @@
 */
 
 
-
 //#include <QCloseEvent>
 #include <QGraphicsSvgItem>
 //#include <QToolBar>
@@ -129,8 +128,6 @@ QMap<QString,QPair<QString,QString> > MainWindow::_graphs;
 //ThreadConsole MainWindow::myThreadConsole(NULL);
 
 QMap<QString,QStringList> MainWindow::permises; // Estructura para guardar los permisos
-
-
 
 
 #ifdef SAFET_TAR

@@ -1242,6 +1242,8 @@ int SafetDocument::countForKey(QSqlQuery &query, const QString& key, SafetWorkfl
                                bool norender) {
     int result = 0;
   //  qDebug("...key: ... |%s|", qPrintable(key));
+    SYD << tr("...CountTokens...key:|%1|").arg(key);
+
     if (key.length() == 0 )  {
             return 0;
      }
@@ -1399,6 +1401,42 @@ QString SafetDocument::getJsonQuery(QSqlQuery &query, QList<QSqlField>& fields, 
 
     QString mydirmedia = SafetYAWL::getConf()["GeneralOptions/dir.media"];
 
+    QStringList columnorder  = SafetYAWL::getConf()["Result/columns.order"].split(",");
+
+
+    Q_ASSERT(rec.count() > 0 );
+
+    int reccount = rec.count();
+
+    QVector<int> mynewrec(reccount);
+
+
+    SYD << tr(".......:SafetDocument::JSON_FIELD...columnorder:|%1|")
+           .arg(columnorder.join(","));
+
+
+    for(int i=0; i < mynewrec.count(); i++) {
+        mynewrec[i] = i;
+    }
+    for(int i=0; i < columnorder.count(); i++) {
+
+            bool ok;
+            int current = columnorder.at(i).toInt(&ok);
+            SYD << tr(".......:SafetDocument::JSON_FIELD...current:|%1|")
+                   .arg(current);
+            if (current >= 0) {
+                int tmp = mynewrec[i];
+                mynewrec[i] = current;
+                mynewrec[current] = tmp;
+                SYD << tr(".......:SafetDocument::JSON_FIELD...mynewrec[%1]:|%2|")
+                       .arg(i)
+                       .arg(mynewrec[i]);
+            }
+
+    }
+
+
+
     dcount = 0;
 	while (query.next()) {
 	             
@@ -1410,28 +1448,36 @@ QString SafetDocument::getJsonQuery(QSqlQuery &query, QList<QSqlField>& fields, 
 			}
 		}	   		
         out << "{ ";
-        for (int i= 0; i< rec.count(); i++) {
+        SYD << tr("***************************");
+        for (int i= 0; i< mynewrec.count(); i++) {
 
 
 
+            if (dcount == 1 ) {
+            SYD << tr("...SafetDocument...JSON_FIELD:|%1|.....mynewrec[%3]:|%2|")
+                   .arg(rec.fieldName(mynewrec[i]))
+                   .arg(mynewrec[i])
+                   .arg(i);
+
+            }
             cadena.append(" ");
-            cadena.append(" \""+ rec.fieldName(i) +"\" ");
+            cadena.append(" \""+ rec.fieldName(mynewrec[i]) +"\" ");
             cadena.append(": \"");
-            if ( rec.field(i).type() == QVariant::Bool ) {
-                if (query.value(i).toString().trimmed() == "true" )
+            if ( rec.field(mynewrec[i]).type() == QVariant::Bool ) {
+                if (query.value(mynewrec[i]).toString().trimmed() == "true" )
                     cadena.append(tr("Si"));
                 else
                     cadena.append(tr("No"));
             }
-            else if ((rec.field(i).type() == QVariant::Int
-                      || rec.field(i).type() == QVariant::UInt
-                      || rec.field(i).type() == QVariant::LongLong
-                      || rec.field(i).type() == QVariant::ULongLong)
+            else if ((rec.field(mynewrec[i]).type() == QVariant::Int
+                      || rec.field(mynewrec[i]).type() == QVariant::UInt
+                      || rec.field(mynewrec[i]).type() == QVariant::LongLong
+                      || rec.field(mynewrec[i]).type() == QVariant::ULongLong)
                      &&
-                     (rec.field(i).name().indexOf(tr("fecha")) != -1
-                      || rec.field(i).name().indexOf(tr("time")) != -1) ) {
+                     (rec.field(mynewrec[i]).name().indexOf(tr("fecha")) != -1
+                      || rec.field(mynewrec[i]).name().indexOf(tr("time")) != -1) ) {
 
-                int mytimet = query.value(i).toInt();
+                int mytimet = query.value(mynewrec[i]).toInt();
 
                 QString myvalue = QDateTime::fromTime_t(mytimet)
                     .toString(Safet::DateFormat);
@@ -1446,7 +1492,7 @@ QString SafetDocument::getJsonQuery(QSqlQuery &query, QList<QSqlField>& fields, 
 
             }
             else {
-                QString value = query.value(i).toString().trimmed();
+                QString value = query.value(mynewrec[i]).toString().trimmed();
                 QString valuefile = mydirmedia+ "/" + value.section("/",-1);
 
                 if (!value.isEmpty() && QFile::exists(valuefile)) {
@@ -1461,6 +1507,9 @@ QString SafetDocument::getJsonQuery(QSqlQuery &query, QList<QSqlField>& fields, 
             out << cadena ;
             cadena.clear();
         }
+
+        SYD << tr("cadena:|%1|")
+               .arg(cadena);
 
 		out << "},\n";
 //                if (str.length() > SafetYAWL::MAX_JSON) {
@@ -1481,16 +1530,56 @@ QString SafetDocument::getJsonArrayQuery(QSqlQuery &query, QList<QSqlField>& fie
     QSqlRecord rec;
     rec = query.record();
 
+    QStringList columnorder  = SafetYAWL::getConf()["Result/columns.order"].split(",");
+
+
+    Q_ASSERT(rec.count() > 0 );
+
+    int reccount = rec.count();
+
+    QVector<int> mynewrec(reccount);
+
+
+    SYD << tr(".......:SafetDocument::JSON_FIELD...columnorder:|%1|")
+           .arg(columnorder.join(","));
+
+
+    for(int i=0; i < mynewrec.count(); i++) {
+        mynewrec[i] = i;
+    }
+    for(int i=0; i < columnorder.count(); i++) {
+
+            bool ok;
+            int current = columnorder.at(i).toInt(&ok);
+            SYD << tr(".......:SafetDocument::JSON_FIELD...current:|%1|")
+                   .arg(current);
+            if (current >= 0) {
+                int tmp = mynewrec[i];
+                mynewrec[i] = current;
+                mynewrec[current] = tmp;
+                SYD << tr(".......:SafetDocument::JSON_FIELD_ARRAY...mynewrec[%1]:|%2|")
+                       .arg(i)
+                       .arg(mynewrec[i]);
+            }
+
+    }
+
+
+
+
+
         for( int i = 0; i < rec.count(); i++) {
-           fields.append(rec.field(i) );
+           fields.append(rec.field(mynewrec[i]) );
          }
 
     QString cadena(" ");
 
 
-    QString mydirmedia = SafetYAWL::getConf()["GeneralOptions/dir.media"];
+        QString mydirmedia = SafetYAWL::getConf()["GeneralOptions/dir.media"];
         SYD << tr(".....:SafetDocument::getJsonArrayQuery.........GETJSON...");
         dcount = 0;
+
+
 
     while (query.next()) {
 
@@ -1505,28 +1594,28 @@ QString SafetDocument::getJsonArrayQuery(QSqlQuery &query, QList<QSqlField>& fie
         for (int i= 0; i< rec.count(); i++) {
             cadena.append(" ");
             cadena.append(" \"");
-            if ( rec.field(i).type() == QVariant::Bool ) {
-                if (query.value(i).toString().trimmed() == "true" )
+            if ( rec.field(mynewrec[i]).type() == QVariant::Bool ) {
+                if (query.value(mynewrec[i]).toString().trimmed() == "true" )
                     cadena.append(tr("Si"));
                 else
                     cadena.append(tr("No"));
             }
-            else if ((rec.field(i).type() == QVariant::Int
-                      || rec.field(i).type() == QVariant::UInt
-                      || rec.field(i).type() == QVariant::LongLong
-                      || rec.field(i).type() == QVariant::ULongLong)
+            else if ((rec.field(mynewrec[i]).type() == QVariant::Int
+                      || rec.field(mynewrec[i]).type() == QVariant::UInt
+                      || rec.field(mynewrec[i]).type() == QVariant::LongLong
+                      || rec.field(mynewrec[i]).type() == QVariant::ULongLong)
                      &&
-                     (rec.field(i).name().indexOf(tr("fecha")) != -1
-                      || rec.field(i).name().indexOf(tr("time")) != -1) ) {
+                     (rec.field(mynewrec[i]).name().indexOf(tr("fecha")) != -1
+                      || rec.field(mynewrec[i]).name().indexOf(tr("time")) != -1) ) {
 
-                int mytimet = query.value(i).toInt();
+                int mytimet = query.value(mynewrec[i]).toInt();
                 QString myvalue = QDateTime::fromTime_t(mytimet)
                         .toString(Safet::DateFormat);
                 cadena.append(myvalue);
 
             }
             else {
-                QString value = query.value(i).toString().trimmed();
+                QString value = query.value(mynewrec[i]).toString().trimmed();
                 SYD << tr(".....:SafetDocument::getJsonArrayQuery.........GETJSON...value:|%1|")
                        .arg(value);
 
