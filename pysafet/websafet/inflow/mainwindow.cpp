@@ -1609,8 +1609,9 @@ QString MainWindow::generateFormHead(const QString& o) {
                           "    op:document.getElementById(\"safetoperation\").value,\n"
                           "    modname:\"%3\",\n"
                           "    primary:this.id,\n"
-                          "    formstring: genFormString(document.forms[1]),\n"
-                          "   formkey: document.forms[1].elements[1].value},\n"
+                          //************** FIX GENERATE FORM 0 OR FORM 1
+                          "    formstring: genFormString(document.forms[0]),\n"
+                          "   formkey: document.forms[0].elements[0].value},\n"
                           " function(data)"
                           " {\n"
                           "  console.log(\"*data: \"+data);\n"
@@ -1873,12 +1874,18 @@ QString MainWindow::generateModifyHTML(const QString& operation, const QString& 
              ||   operation.endsWith(QLatin1String("con_filtrorecursivo"),Qt::CaseInsensitive)
         ){
 
+
         SYD << tr("........MainWindow::generateModifyHTML.....(***)....enter list options->");
         if (fieldname == "Periodo_vacacional")  {
             result = mymodel->getUpdateString(operation,fieldname,key,mylist);
             SYD << tr("..........(Periodo_vacacional)...generateModifyHTML: |%1|")
                .arg(result);
         }
+//        else if (fieldname == "id")  {
+//            result = mymodel->getUpdateString(operation,fieldname,key,mylist);
+//            SYD << tr("..........(Periodo_vacacional)...generateModifyHTML: |%1|")
+//               .arg(result);
+//        }
         else if (fieldname == "Correspondencia")  {
 
             result = mymodel->getUpdateString(operation,fieldname,key,mylist);
