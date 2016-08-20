@@ -669,6 +669,45 @@ QSet<QString> SafetWorkflow::getKeys(const QString& idtask) {
 int SafetWorkflow::getQuerySize(QSqlQuery& qry) {
     int n = -1;
     bool hassize = SafetYAWL::currentDb.driver()->hasFeature(QSqlDriver::QuerySize);
+
+    QString myfield = SafetYAWL::getConf()["Result/count.forfield"];
+
+     bool typeprice = SafetYAWL::getConf()["Result/count.type"] == "price";
+
+    int posfield = qry.record().indexOf(myfield);
+
+
+    if (posfield >= 0){
+
+        n = 0;
+        bool ok;
+
+        while (qry.next()) {
+            QString myvalue = qry.value(posfield).toString();
+
+            uint newvalue = 0;
+            if (typeprice) {
+                myvalue.replace("Bs. ","");
+                myvalue.replace(".","");
+                myvalue.replace(QRegExp(",\\d\\d"),"");
+            }
+
+            SYD  << tr("GET_QUERYSIZE...POS_FIELD...myvalue:|%1|").arg(myvalue);
+
+            newvalue = myvalue.toInt(&ok);
+
+            SYD  << tr("GET_QUERYSIZE...POS_FIELD...intvalue:|%1|").arg(newvalue);
+
+            n = n + newvalue;
+        }
+        SYD  << tr("");
+        //while (qry.previous());
+        qry.first();
+        qry.previous();
+        return n;
+
+    }
+
     if (hassize) {
         return qry.size();
     }
@@ -913,7 +952,8 @@ SafetCondition* SafetWorkflow::searchCondition(const QString& idcon) {
 int SafetWorkflow::numberOfTokens(const SafetVariable& v) {
     QSqlQuery myquery =  getSQLDocuments(v);
            int result = SafetWorkflow::getQuerySize( myquery );
-           return result;
+
+          return result;
 }
 
 QString  SafetWorkflow::getStackExpression(const SafetVariable& v, QStack<QPair<QString,QString> > &splitresults) {
