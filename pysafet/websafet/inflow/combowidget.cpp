@@ -1228,7 +1228,7 @@ QString ComboWidget::html() {
         QStringList mylist = conf()["options"].toString().split(",");
         if (mylist.count()> 1 && mylist.at(1)=="oneoption") {
             result = QString("<input name=\"%1\" id=\"%1\" size=\"25\"></input>")
-                    .arg(caption());
+                       .arg(caption());
                     setOneoption(true);
                     return result;
         }
@@ -1244,17 +1244,6 @@ QString ComboWidget::html() {
 
 
     }
-
-
-
-
-
-
-
-
-
-
-
 
 
     QString mypreffix = caption().left(4);
@@ -1308,9 +1297,16 @@ QString ComboWidget::html() {
     }
 
 
-    result += QString("<select name=\"%1\" id=\"%1\" class=\"form-control\"  ")
-            .arg(caption());
+   if (caption()!="id") {
+       result += QString("<select name=\"%1\" id=\"%1\" class=\"form-control\"  ")
+                .arg(caption());
+   }
+   else {
 
+    result += QString("<input type=\"text\" list=\"%2list\" name=\"%1\" id=\"%1\" class=\"form-control\"  ")
+            .arg(caption())
+            .arg(mypreffix);
+   }
 
     bool isenables = myenables.count() > 0 ;
     if (isenables ) {
@@ -1318,31 +1314,55 @@ QString ComboWidget::html() {
                 .arg(mypreffix);
     }
 
-    result += ">\n";
-    result += QLatin1String("<option value=\"\"></option>");
+    if (caption()!="id") {
+
+        result += ">\n";
+    } else {
+         result += "/>\n";
+//         result += QString("<input type=\"hidden\" name=\"%1-hidden\" id=\"%1-hidden\""
+//                           "class=\"form-control\"  />")
+//                 .arg(caption())
+//                 .arg(mypreffix);
+
+    }
+    if (caption()!="id") {
+            result += QLatin1String("<option value=\"\"></option>");
+    } else {
+        result += QString("<datalist id=\"%1list\">").arg(mypreffix);
+    }
     foreach(QString s, options()){
         if (!s.trimmed().isEmpty()) {
 
         QString newitem;
-        if (s.length() >= shlen) {
-        newitem = QString("<option value=\"%2\" title=\"%3\">%1</option>\n")
-                .arg(SafetYAWL::shrinkSentence(s,shlen))
-                .arg(getRealValue(s))
-                .arg(s);
-        }
-        else {
-            newitem = QString("<option value=\"%2\">%1</option>\n")
-                    .arg(SafetYAWL::shrinkSentence(s,shlen))
-                    .arg(getRealValue(s));
-        }
+        if (caption()!="id") {
+                if (s.length() >= shlen) {
+                newitem = QString("<option value=\"%2\" title=\"%3\">%1</option>\n")
+                        .arg(SafetYAWL::shrinkSentence(s,shlen))
+                        .arg(getRealValue(s))
+                        .arg(s);
+                }
+                else {
+                    newitem = QString("<option value=\"%2\">%1</option>\n")
+                            .arg(SafetYAWL::shrinkSentence(s,shlen))
+                            .arg(getRealValue(s));
+                }
 
+        } else {
+                    newitem = QString("<option value=\"%2\" title=\"%3\">%1</option>\n")
+                            .arg(s)
+                            .arg(getRealValue(s))
+                            .arg(s);
+        }
             result += newitem;
         }
     }
 
-
+if (caption()!="id") {
     result += QLatin1String("</select>");
-
+}
+else {
+    result += QLatin1String("</datalist>");
+}
     if (hasloading) {
 
         result += QString("\n<div id='divForLoading_%1' name='divForLoading_%1' style='TEXT-ALIGN: center;display: none;'>"
