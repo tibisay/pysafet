@@ -678,7 +678,6 @@ int SafetWorkflow::getQuerySize(QSqlQuery& qry) {
 
 
     if (posfield >= 0){
-
         n = 0;
         bool ok;
 
@@ -757,6 +756,8 @@ SafetDocument SafetWorkflow::getDocuments(const QString& idvariable, QList<QSqlF
             case SafetWorkflow::JSON:
             SYD << tr("....SafetWorkflow::getDocuments...recorriendo..JSON");
                 str = mydocument.getJsonQuery(query,fields,tmphowmany,info);
+                SYD << tr("...1...returning str:|%1|")
+                       .arg(str);
                 break;
         case SafetWorkflow::JSONARRAY:
                 SYD << tr("....SafetWorkflow::getDocuments...recorriendo..JSONARRAY");
@@ -824,6 +825,8 @@ SafetDocument SafetWorkflow::getDocuments(const QString& idvariable,
                 break;
             case SafetWorkflow::JSON:
                 str = mydocument.getJsonQuery(query,fields,howmanydocuments,info);
+                SYD << tr("...2...returning str:|%1|")
+                       .arg(str);
                 break;
             case SafetWorkflow::JSONARRAY:
                 SYD << tr("........:SafetWorkflow::getDocuments....getJsonArrayQuery....");
