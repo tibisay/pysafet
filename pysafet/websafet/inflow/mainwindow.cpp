@@ -39,6 +39,7 @@
 
 
 
+
 //#include <QCloseEvent>
 #include <QGraphicsSvgItem>
 //#include <QToolBar>
@@ -1322,6 +1323,8 @@ QString MainWindow::menuCommands() {
 
         }
 
+
+
         //myperms= MainWindow::doPermiseExecOperationAction(c);
         myperms= doPermiseExecOperationAction(title);
 
@@ -1548,10 +1551,13 @@ QString MainWindow::generateFormHead(const QString& o) {
 	    result += QString("var safetCurrentCombos = new Array();\n");
         result += QString("var CKOBJ = null;\n");
         result += QString("var CKVALUE = \"\";\n");
-	    result += QString("$(document).ready(function(){\n");
+        if (keymodifyfields.at(0) != "id") {
+            result += QString("$(document).ready(function(){\n");
+        }
     }
 
     int keyscount = 0;
+    bool isangularw = false;
     foreach(QString keymodifyfield, keymodifyfields) {
         if ( firstkeymodifyfield.isEmpty()) {
             if ( keymodifyfield.startsWith(QLatin1String("::literal:"))) {
@@ -1588,6 +1594,7 @@ QString MainWindow::generateFormHead(const QString& o) {
 
         QString mydirmedia = SafetYAWL::getConf()["GeneralOptions/dir.media"];
 
+
         QString myid = keymodifyfield;
         myid.replace(" ","_");
 	 QString myFunctionAfter = "";
@@ -1600,11 +1607,145 @@ QString MainWindow::generateFormHead(const QString& o) {
                     .arg(keyscount);
         }
 
-         QString newresult =  QString(""
+        QString newresult = "";
 
+
+
+        if (keymodifyfield == "id") {
+            isangularw = true;
+            newresult =  QString(""
+                             "function  doChangeFor%2(idvalue) \n"
+                             "{\n"
+                                         "console.log(\"..changing id\");\n"
+                             "   $(\"#divForLoading\").show();\n"
+                             "    $.post(\"%1/loaddata\",{ id:idvalue,\n"
+                             "    op:document.getElementById(\"safetoperation\").value,\n"
+                             "    modname:\"%3\",\n"
+                             "    primary:\"%2\",\n"
+                             //************** FIX GENERATE FORM 0 OR FORM 1
+                             "    formstring: genFormString(document.forms[0]),\n"
+                             "   formkey: document.forms[0].elements[0].value},\n"
+                             " function(data)"
+                             " {\n"
+                             "  console.log(\"*data: \"+data);\n"
+                             "  mylist = data.split(\"<SAFETSEPARATOR/>\");\n"
+                             "  htmlsep = false;\n"
+                             "  if (mylist.length < 2) {\n"
+                             "    mylist = data.split(\"<SAFETHTMLSEPARATOR/>\");\n"
+                             "    htmlsep = true;\n "
+                             "  }\n"
+                             "  for(i=0; i < mylist.length;i++){\n"
+                             "       myname  = \"\";\n"
+                             "       myvalue = \"\"; \n"
+                             "       myname = mylist[i].substr(0,mylist[i].indexOf(\":\"));\n"
+                             "       console.log(\"****************MYNAME:\" + myname);\n"
+
+                             "       if (myname.length == 0 ) {\n"
+                             "               continue;\n"
+                             "       }\n"
+                             "       myvalue = mylist[i].substr(mylist[i].indexOf(\":\")+1);\n"
+                             "       console.log(\"myvalue(*):\" + myvalue);\n"
+
+                             "       j= 0;\n"
+                             "       for(j=0; j<myname.length;j++){\n"
+                             "               if ( (myname.charCodeAt(j)!=32) && (myname.charCodeAt(j)!=13) && (myname.charCodeAt(j)!= 10) ) {\n"
+                             "                       break;\n"
+                             "               }\n"
+                             "       }\n"
+                             "       myname = myname.substr(j);\n"
+                             "       console.log(\"myname(j):\" + myname);\n"
+
+                             "       j=myvalue.length-1;\n"
+                             "       lastpos = myvalue.length;\n"
+                             "       for(j=myvalue.length-1;j>0;j--){\n"
+                             "               if (myvalue.charAt(j) != ' ') {\n"
+                             "                       break;\n"
+                             "               }\n"
+                             "               lastpos = lastpos -1;\n"
+                             "       }\n"
+                             "       myvalue = myvalue.substr(0,lastpos);\n"
+                             "       console.log(\"*myvalue:\" + myvalue);\n"
+                             "       if (myvalue.indexOf(\"%4\") != -1)  {\n"
+                             "          mynewpreview = \"vistaPrevia\" + myname; \n"
+                             "          console.log(\"preview:\" + mynewpreview);  \n    "
+                             "          $(\"#\" + mynewpreview).attr(\"src\",myvalue);\n"
+                             "         \n"
+                             "       } else if (myname == \"Mostrar_tabla\") {\n"
+                                         "safetjson.tasks = eval(myvalue);\n"
+                                         "  oTable.fnDestroy();\n"
+                                         "safetproccessData();\n"
+                             "       } else if (document.getElementById(myname)) {\n"
+                             "          if (htmlsep == true ) {\n"
+                             "               $(\"#\"+myname).html(myvalue);\n"
+                             "               if ( $(\"#\"+myname).is(\"input\") ) {\n "
+                             "                 document.getElementById(myname).value = myvalue; \n   "
+
+                             "               }                                     \n "
+                             "               else {                                 \n"
+                             "                  console.log(\"PUTTING myname:\"+myname); \n"
+                             "                  console.log(\"PUTTING myvalue:\"+myvalue); \n"
+                             "                 $(\"#\"+myname).html(myvalue);\n     \n"
+                             "               }                                      \n"
+                             "          } else {"
+                             "                  document.getElementById(myname).value = myvalue;\n"
+                             "          }\n"
+                             "      } else {\n"
+                                   "}\n"
+                             "   if (myvalue == \"true\" ) {\n"
+                                   "  console.log(\"MyName is true:\"+myname); \n"
+                                 "   if (document.getElementById(myname+\"_1\") != null ) {\n"
+                                 "             document.getElementById(myname+\"_1\").checked = true;"
+                                     "}\n"
+                                   "}\n"
+                             "   if (document.getElementById(myname) == null ) {\n"
+                             "      myckname = myname +'_ckeditor';\n"
+                             "       myobj =  document.getElementById(myckname);\n"
+                             "         if ( myobj != null ) {\n"
+                             "            console.log(\"ckeditor:\" + myckname );\n                "
+
+                             "             mystr =  \"CKEDITOR.instances.\" + myckname; \n"
+                             "             myckobj =  eval(mystr); \n"
+                             "             console.log(\"myckobj:\" + myckobj);\n          "
+                             //"             myvalue = myvalue.replace(/&#39;/g,\"'\");           "
+                             "             CKOBJ = myckobj;\n                       "
+                             "             CKVALUE = myvalue;\n                       "
+                             "             myckobj.setData(myvalue);     \n"
+                             "             console.log(\"ckeditor...setup...myvalue:\" + myvalue );\n                "
+                             "          } else {"
+                             "              console.log(\"MyName is null:\"+myname); \n"
+                             "              mynewname = myname+\"_\"+myvalue; \n"
+                             "              console.log(\"mynewname is null:\"+mynewname); \n"
+                             "              if (document.getElementById(mynewname) != null ) {\n"
+                             "                     document.getElementById(mynewname).checked = true; \n"
+                                            "}\n"
+                             "          }\n"
+                             "     }\n"
+
+                             "   }\n"
+                             " });\n\n"
+
+                                         "%5"
+                             "       $(\"#divForLoading\").hide();\n"
+                             "         console.log(\"saliendo...\");\n"
+
+                             "}\n"
+
+
+                             )
+                    .arg(hostURL())
+                   .arg(keymodifyfield)
+                    .arg(modname)
+                    .arg(mydirmedia)
+               .arg(myFunctionAfter);
+
+        }
+        else {
+
+         newresult =  QString(""
                           "$(\"#%2\").change(\n"
                           "function() "
                           "{\n"
+                                      "console.log(\"..changing id\");\n"
                           "   $(\"#divForLoading\").show();\n"
                           "    $.post(\"%1/loaddata\",{ id:$(this).val(),\n"
                           "    op:document.getElementById(\"safetoperation\").value,\n"
@@ -1721,7 +1862,8 @@ QString MainWindow::generateFormHead(const QString& o) {
                 .arg(keymodifyfield)
                  .arg(modname)
                  .arg(mydirmedia)
-		 .arg(myFunctionAfter);
+            .arg(myFunctionAfter);
+        }
         //         .arg(keyscount == 0?"\nif (typeof safetProcessAfter == 'function') { safetProcessAfter(); }\n":"");
 
 
@@ -1788,13 +1930,15 @@ QString MainWindow::generateFormHead(const QString& o) {
 
 
 
-    if (keymodifyfields.count() > 0 ) {        
-    	result += "});\n\n";	        
+    if (keymodifyfields.count() > 0 ) {
+
+        if (!isangularw) {
+                result += "});\n\n";
+        }
+
         result += "\n"
 
             "</script>\n"
-//            "</head>\n"
-//            "<body>\n"
             "";
 	}
 	else {
