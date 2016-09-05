@@ -1297,7 +1297,7 @@ QString ComboWidget::html() {
     }
 
 
-   if (caption()!="id") {
+   if (caption()!="id1") {
        result += QString("<select name=\"%1\" id=\"%1\" class=\"form-control\"  ")
                 .arg(caption());
    }
@@ -1314,7 +1314,7 @@ QString ComboWidget::html() {
                 .arg(mypreffix);
     }
 
-    if (caption()!="id") {
+    if (caption()!="id1") {
 
         result += ">\n";
     } else {
@@ -1325,7 +1325,7 @@ QString ComboWidget::html() {
 //                 .arg(mypreffix);
 
     }
-    if (caption()!="id") {
+    if (caption()!="id1") {
             result += QLatin1String("<option value=\"\"></option>");
     } else {
         result += QString("<datalist id=\"%1list\">").arg(mypreffix);
@@ -1334,7 +1334,7 @@ QString ComboWidget::html() {
         if (!s.trimmed().isEmpty()) {
 
         QString newitem;
-        if (caption()!="id") {
+        if (caption()!="id1") {
                 if (s.length() >= shlen) {
                 newitem = QString("<option value=\"%2\" title=\"%3\">%1</option>\n")
                         .arg(SafetYAWL::shrinkSentence(s,shlen))
@@ -1357,7 +1357,7 @@ QString ComboWidget::html() {
         }
     }
 
-if (caption()!="id") {
+if (caption()!="id1") {
     result += QLatin1String("</select>");
 }
 else {
