@@ -57,6 +57,8 @@
 #endif
 
 
+
+
 #include <getopt.h>
 #include "mainwindow.h"
 //#include "textedit.h"
@@ -1394,6 +1396,8 @@ QString MainWindow::menuCommands() {
 
 
     result += "] }";
+
+    result.replace(QRegExp(",{2,}"),",");
 
     SYD << tr("......menuCommands()........MENU_JSON:|%1|")
            .arg(result);
