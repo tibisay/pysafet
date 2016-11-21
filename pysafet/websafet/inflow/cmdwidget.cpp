@@ -349,7 +349,8 @@ QString CmdWidget::html() {
                                 "%3\n"
                                "</div>\n")
                             .arg(poscol)
-                            .arg((removelabel?"":QString("<label  class=\"col-md-2 control-label\">%2</label>\n").arg(_caption.replace("_"," ")).arg(newcaption)))
+                            .arg((removelabel?"":QString("<label  class=\"col-md-2 control-label\">%2</label>\n")
+                                              .arg(_caption.replace("_"," ")).arg(newcaption)))
                             .arg(radiohtml);
 
 
@@ -467,7 +468,7 @@ QString CmdWidget::html() {
                  result += QString(""
                                "<div class=\"col-%4 column \">\n"
                                 "%6\n"
-                                "<input %2  class=\"form-control\" id=\"%1\" name=\"%1\" %3 %5 >\n"
+                                "<input %2  class=\"form-control\"  data-toggle=\"tooltip\" data-html=\"true\" title=\"\" id=\"%1\" name=\"%1\" %3 %5 >\n"
                                "</div>\n")
                             .arg(_caption)
                             .arg(_typeinput)
@@ -491,7 +492,7 @@ QString CmdWidget::html() {
                           "<div class=\"form-group\" >"
                           "<label for=\"%1\" class=\"col-md-1 control-label\">%4</label>"
                           "<input %2 class:q"
-                        "= \"form-control\" id=\"%1\" name=\"%1\" %3  %5 >"
+                        "= \"form-control\" id=\"%1\" name=\"%1\" title=\"Mensaje de ayuda2\"  %3  %5 >"
                         "</div>"
                         )
                 .arg(_caption)
