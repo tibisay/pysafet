@@ -1,0 +1,44 @@
+\BOOKMARK [0][-]{chapter.1}{Qu\351 es PySafet?}{}% 1
+\BOOKMARK [0][-]{chapter.2}{Organizaci\363n de trabajo}{}% 2
+\BOOKMARK [0][-]{chapter.3}{Motivaci\363n y objetivos}{}% 3
+\BOOKMARK [0][-]{chapter.4}{Ejemplos de algunos Diagrama de flujo de trabajo}{}% 4
+\BOOKMARK [0][-]{chapter.5}{Arquitectura}{}% 5
+\BOOKMARK [0][-]{chapter.6}{Sistema Automatizado de Firma Electr\363nica y Estampado Electr\363nico}{}% 6
+\BOOKMARK [0][-]{chapter.7}{Debian Wheezy 7.0 \(64 bits/32bits\)}{}% 7
+\BOOKMARK [1][-]{section.7.1}{Funciones}{chapter.7}% 8
+\BOOKMARK [0][-]{chapter.8}{Ubuntu \(32 bits/ 64 bits\)}{}% 9
+\BOOKMARK [0][-]{chapter.9}{Archivos fuentes}{}% 10
+\BOOKMARK [1][-]{section.9.1}{Pasos para la compilaci\363n}{chapter.9}% 11
+\BOOKMARK [1][-]{section.9.2}{Verificaci\363n de la instalaci\363n}{chapter.9}% 12
+\BOOKMARK [1][-]{section.9.3}{Funciones}{chapter.9}% 13
+\BOOKMARK [0][-]{chapter.10}{Paso para la creaci\363n del directorio .safet/}{}% 14
+\BOOKMARK [1][-]{section.10.1}{1\260 PRIMER PASO}{chapter.10}% 15
+\BOOKMARK [1][-]{section.10.2}{2\260 SEGUNDO PASO}{chapter.10}% 16
+\BOOKMARK [1][-]{section.10.3}{3\260 TERCER PASO}{chapter.10}% 17
+\BOOKMARK [0][-]{chapter.11}{Estructura del directorio .safet/}{}% 18
+\BOOKMARK [0][-]{chapter.12}{auth.conf \(Archivo de autenticaci\363n y autorizaci\363n\)}{}% 19
+\BOOKMARK [0][-]{chapter.13}{safet.conf \(Archivo de configuraci\363n inicial\)}{}% 20
+\BOOKMARK [0][-]{chapter.14}{Clase MainWindow\(Safet.MainWindow\)}{}% 21
+\BOOKMARK [0][-]{chapter.15}{Clase SafetXmlObject \(Safet.SafetXmlObject\)}{}% 22
+\BOOKMARK [0][-]{chapter.16}{Clase SafetDocument}{}% 23
+\BOOKMARK [0][-]{chapter.17}{Clase SafetVariable}{}% 24
+\BOOKMARK [0][-]{chapter.18}{Clase SafetYAWL}{}% 25
+\BOOKMARK [0][-]{chapter.19}{Clase SafetWorkflow}{}% 26
+\BOOKMARK [0][-]{chapter.20}{Creaci\363n de las tablas en base de datos}{}% 27
+\BOOKMARK [0][-]{chapter.21}{Operaciones CRUD+\(flujo\) utilizando PySafet}{}% 28
+\BOOKMARK [1][-]{section.21.1}{1\260 PRIMER PASO}{chapter.21}% 29
+\BOOKMARK [0][-]{chapter.22}{Crear el flujo de trabajo utilizando un archivo XML}{}% 30
+\BOOKMARK [1][-]{section.22.1}{1\260 PRIMER PASO}{chapter.22}% 31
+\BOOKMARK [1][-]{section.22.2}{2\260 SEGUNDO PASO}{chapter.22}% 32
+\BOOKMARK [1][-]{section.22.3}{3\260 TERCER PASO}{chapter.22}% 33
+\BOOKMARK [1][-]{section.22.4}{4\260 CUARTO PASO}{chapter.22}% 34
+\BOOKMARK [1][-]{section.22.5}{5\260 QUINTO PASO}{chapter.22}% 35
+\BOOKMARK [0][-]{chapter.23}{Ver datos usando flujos de trabajo}{}% 36
+\BOOKMARK [1][-]{section.23.1}{1\260 PRIMERA ACCION \(Tarea ``vRegistrado''\)}{chapter.23}% 37
+\BOOKMARK [1][-]{section.23.2}{Combinaci\363n de Json con HTML\(javascript\)}{chapter.23}% 38
+\BOOKMARK [0][-]{chapter.24}{Ver fichas usando flujos de trabajo}{}% 39
+\BOOKMARK [1][-]{section.24.1}{Ficha \(vRegistrado\) \(vPedido\)}{chapter.24}% 40
+\BOOKMARK [0][-]{chapter.25}{Ver gr\341fos generales usando flujos de trabajo}{}% 41
+\BOOKMARK [0][-]{chapter.26}{Instalaci\363n de Inflow}{}% 42
+\BOOKMARK [0][-]{chapter.27}{Visualizaci\363n de la interfaz gr\341fica de inflow}{}% 43
+\BOOKMARK [0][-]{section*.6}{\315ndice}{}% 44

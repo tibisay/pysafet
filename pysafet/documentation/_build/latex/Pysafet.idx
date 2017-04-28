@@ -1,0 +1,25 @@
+\indexentry{Motivaci\IeC {\'o}n y objetivos|hyperpage}{7}
+\indexentry{Arquitectura|hyperpage}{11}
+\indexentry{Sistema Automatizado de Firma Electr\IeC {\'o}nica y Estampado Electr\IeC {\'o}nico|hyperpage}{13}
+\indexentry{Debian Wheezy 7.0 (64 bits/32bits)|hyperpage}{15}
+\indexentry{Funciones|hyperpage}{16}
+\indexentry{Ubuntu (32 bits/ 64 bits)|hyperpage}{17}
+\indexentry{Archivos fuentes|hyperpage}{19}
+\indexentry{Pasos para la compilaci\IeC {\'o}n|hyperpage}{20}
+\indexentry{Verificaci\IeC {\'o}n de la instalaci\IeC {\'o}n|hyperpage}{20}
+\indexentry{Funciones|hyperpage}{20}
+\indexentry{Paso para la creaci\IeC {\'o}n del directorio .safet/|hyperpage}{21}
+\indexentry{Estructura del directorio .safet/|hyperpage}{23}
+\indexentry{Clase MainWindow(Safet.MainWindow)|hyperpage}{39}
+\indexentry{Clase SafetXmlObject (Safet.SafetXmlObject)|hyperpage}{45}
+\indexentry{Clase SafetDocument|hyperpage}{47}
+\indexentry{Clase SafetVariable|hyperpage}{51}
+\indexentry{Clase SafetYAWL|hyperpage}{53}
+\indexentry{Clase SafetWorkflow|hyperpage}{55}
+\indexentry{Creaci\IeC {\'o}n de las tablas en base de datos|hyperpage}{57}
+\indexentry{Operaciones CRUD+(flujo) utilizando PySafet|hyperpage}{65}
+\indexentry{Crear el flujo de trabajo utilizando un archivo XML|hyperpage}{81}
+\indexentry{Ver datos usando flujos de trabajo|hyperpage}{113}
+\indexentry{Ver gr\IeC {\'a}fos generales usando flujos de trabajo|hyperpage}{135}
+\indexentry{Instalaci\IeC {\'o}n de Inflow|hyperpage}{137}
+\indexentry{Visualizaci\IeC {\'o}n de la interfaz gr\IeC {\'a}fica de inflow|hyperpage}{141}

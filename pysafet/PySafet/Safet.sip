@@ -24,6 +24,8 @@ public:
     bool toInputConsole(const QString& action, bool withpermises = true);
     bool toInputUsers(const QString& action);
     QString currentJSON();
+    QString getCurrentRest();
+    QString executeRest(const QString &url, const QString &name = "admin", const QString &pass = "admin");
     QString currentDATA() const;
     QString currentError();
     void setMediaPath(const QString& m);

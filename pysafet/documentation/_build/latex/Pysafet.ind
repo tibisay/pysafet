@@ -1,0 +1,64 @@
+\begin{theindex}
+\def\bigletter#1{{\Large\sffamily#1}\nopagebreak\vspace{1mm}}
+
+  \bigletter A
+  \item Archivos fuentes, \hyperpage{19}
+  \item Arquitectura, \hyperpage{11}
+
+  \indexspace
+  \bigletter C
+  \item Clase MainWindow(Safet.MainWindow), \hyperpage{39}
+  \item Clase SafetDocument, \hyperpage{47}
+  \item Clase SafetVariable, \hyperpage{51}
+  \item Clase SafetWorkflow, \hyperpage{55}
+  \item Clase SafetXmlObject (Safet.SafetXmlObject), \hyperpage{45}
+  \item Clase SafetYAWL, \hyperpage{53}
+  \item Creaci\IeC {\'o}n de las tablas en base de datos, \hyperpage{57}
+  \item Crear el flujo de trabajo utilizando un archivo XML, \hyperpage{81}
+
+  \indexspace
+  \bigletter D
+  \item Debian Wheezy 7.0 (64 bits/32bits), \hyperpage{15}
+
+  \indexspace
+  \bigletter E
+  \item Estructura del directorio .safet/, \hyperpage{23}
+
+  \indexspace
+  \bigletter F
+  \item Funciones, \hyperpage{16}, \hyperpage{20}
+
+  \indexspace
+  \bigletter I
+  \item Instalaci\IeC {\'o}n de Inflow, \hyperpage{137}
+
+  \indexspace
+  \bigletter M
+  \item Motivaci\IeC {\'o}n y objetivos, \hyperpage{7}
+
+  \indexspace
+  \bigletter O
+  \item Operaciones CRUD+(flujo) utilizando PySafet, \hyperpage{65}
+
+  \indexspace
+  \bigletter P
+  \item Paso para la creaci\IeC {\'o}n del directorio .safet/, \hyperpage{21}
+  \item Pasos para la compilaci\IeC {\'o}n, \hyperpage{20}
+
+  \indexspace
+  \bigletter S
+  \item Sistema Automatizado de Firma Electr\IeC {\'o}nica y Estampado Electr\IeC {\'o}nico, 
+		\hyperpage{13}
+
+  \indexspace
+  \bigletter U
+  \item Ubuntu (32 bits/ 64 bits), \hyperpage{17}
+
+  \indexspace
+  \bigletter V
+  \item Ver datos usando flujos de trabajo, \hyperpage{113}
+  \item Ver gr\IeC {\'a}fos generales usando flujos de trabajo, \hyperpage{135}
+  \item Verificaci\IeC {\'o}n de la instalaci\IeC {\'o}n, \hyperpage{20}
+  \item Visualizaci\IeC {\'o}n de la interfaz gr\IeC {\'a}fica de inflow, \hyperpage{141}
+
+\end{theindex}

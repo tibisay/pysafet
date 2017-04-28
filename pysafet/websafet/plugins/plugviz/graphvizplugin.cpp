@@ -278,7 +278,12 @@ QString graphvizPlugin::checkSES(const QString& s, ExtraInfoShow ex,
               QColor color ( cgradient );
               int h,s,v;
 
-              double porc = rx.cap(1).toDouble(&ok);
+	      QString myporc = rx.cap(1); 
+	      qDebug("......PLUGIN...porc...1:|%s|", qPrintable(myporc));
+              double porc = myporc.toDouble(&ok);
+	     
+	      qDebug("......PLUGIN.......porc...2:|%0.2f|", porc);
+
               if ( porc ==  -100 ) {
 
               }
@@ -678,7 +683,7 @@ QString graphvizPlugin::renderGraph(const QString&  code, const QString& info,
 
     fpin = fopen (qPrintable(infile),"r");
     Q_CHECK_PTR(fpin);
-    g = agread(fpin);
+    g = agread(fpin,NULL);
     fclose(fpin);
     char filetype[10];
     //strncpy(filetype,qPrintable(info), strlen(filetype));

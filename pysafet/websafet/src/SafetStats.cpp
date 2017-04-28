@@ -192,7 +192,7 @@ QStringList SafetStats::processInfo(SafetNode* node, SafetStats::StatsType t,
 
              if ( porc == 1 ) {
                  SafetYAWL::_isstatstokenfound = true; // Es el único token
-                 textualinfo =  trUtf8("*El documento o solicitud se encuentra <b>aquÃ­</b>");
+                 textualinfo =  trUtf8("*El documento o solicitud se encuentra aqui");
              }
 
              newinfo +=  tr(", ")+getInfoString(attr).arg(porc, 0, 'g', 2);
@@ -334,6 +334,10 @@ int SafetStats::numberOfTokens(const QString& idtask, bool norender, const QStri
           else {
                //qDebug("...tokensForKey...info: |%s|...result: %d", qPrintable(info), result);
                result = result + tokensForKey(*curvar,info,norender);
+               SYD << tr("...........CountTokens..idtask:|%1|..info: |%2|...result: |%3|")
+                      .arg(idtask)
+                      .arg(info)
+                      .arg(result);
           }
 
 

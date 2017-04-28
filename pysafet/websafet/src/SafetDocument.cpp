@@ -1386,9 +1386,10 @@ QString SafetDocument::getXmlQuery(QSqlQuery &query,int &dcount, const QString& 
 
 QString SafetDocument::getJsonQuery(QSqlQuery &query, QList<QSqlField>& fields, int &dcount, const QString& info) {
 	QString str;
-	QTextStream out(&str);
+    QString out = "";
 	QSqlRecord rec;
     QString hashumandate = SafetYAWL::getConf()["Documents/json.hashumandate"];
+
 
 
 	rec = query.record();
@@ -1447,7 +1448,7 @@ QString SafetDocument::getJsonQuery(QSqlQuery &query, QList<QSqlField>& fields, 
 				continue;
 			}
 		}	   		
-        out << "{ ";
+        out += "{ ";
         SYD << tr("***************************");
         for (int i= 0; i< mynewrec.count(); i++) {
 
@@ -1504,22 +1505,31 @@ QString SafetDocument::getJsonQuery(QSqlQuery &query, QList<QSqlField>& fields, 
             }
             cadena.append("\", ");
             if ( i+1 == rec.count() ) cadena.chop(2);
-            out << cadena ;
+            out += cadena ;
             cadena.clear();
         }
 
-        SYD << tr("cadena:|%1|")
-               .arg(cadena);
 
-		out << "},\n";
+        out += "},\n";
 //                if (str.length() > SafetYAWL::MAX_JSON) {
 //                    break;
 //                }
 	    
 	}
-        str.chop(2);
+
+    str = out;
+
+
+    if (str.length() > 2) {
+            str.chop(2);
+    }
     _documents = str;
-	return str;
+
+    SYD << tr("getJsonQuery...saliendo...***str...2:|%1|")
+           .arg(str);
+
+
+    return _documents;
 }
 
 
@@ -1639,7 +1649,9 @@ QString SafetDocument::getJsonArrayQuery(QSqlQuery &query, QList<QSqlField>& fie
         out << "],\n";
 
     }
+      if (str.length() > 2) {
         str.chop(2);
+      }
     _documents = str;
     return str;
 }

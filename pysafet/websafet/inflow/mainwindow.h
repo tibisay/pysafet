@@ -48,6 +48,7 @@
 //#include <QApplication>
 //#include <QTcpServer>
 //#include <QStackedWidget>
+#include <QNetworkReply>
 
 #include "SafetYAWL.h"
 
@@ -284,6 +285,8 @@ class MainWindow : public QObject
     QString _listprincipalvariable;
     QString _listprincipalkey;
 
+
+
     // *** Valores de formato para listado y gráfico de flujo
     QString  _pathdoc; // Archivo de entrada para generar la consulta
     QString gopt;
@@ -331,6 +334,7 @@ class MainWindow : public QObject
 
     QString _currentjson;
     QString _currentdata;
+    QString _currentrest;
 
     QString _inputpath;
     QString _hostmediapath;
@@ -459,6 +463,7 @@ public:
    QString hostMediaPath();
 
 
+   QString getCurrentRest() { return _currentrest; }
 
 
     /**
@@ -924,6 +929,8 @@ public:
 
       QStringList generateTips(const QString &cs, const QString& parcialscript);
 
+      QString executeRest(const QString &url, const QString &name = "admin", const QString &pass = "admin");
+
 public Q_SLOTS: // Slots para el manejo de los servicios de Escritorio (QDesktopServices)
 
         void browse( const QUrl &url );
@@ -931,6 +938,10 @@ public Q_SLOTS: // Slots para el manejo de los servicios de Escritorio (QDesktop
 
             void toSend(bool sign = false);
 
+
+            void handleNetworkData(QNetworkReply *networkReply);
+
+            void slotError(QNetworkReply::NetworkError e);
 
     bool createBdoc(const QString &content);
     QString toInputForm(const QString& action, bool withpermises = true);

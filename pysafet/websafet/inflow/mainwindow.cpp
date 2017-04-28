@@ -50,6 +50,8 @@
 #include <QVariantList>
 #include <QCoreApplication>
 #include <QScriptEngine>
+#include <QNetworkAccessManager>
+#include <QNetworkRequest>
 
 #ifdef SAFET_TAR
 //#include "ui/getsigndocumentdialog.h"
@@ -429,6 +431,72 @@ bool MainWindow::sendCheckEmail(const QString& user, const QString& plink) {
        return false;
 
 
+
+}
+
+
+void MainWindow::handleNetworkData(QNetworkReply *networkReply)
+{
+    SYD << tr("MainWindow::handleNetworkData....1");
+
+    QUrl url = networkReply->url();
+
+    SYD << tr("MainWindow::handleNetworkData....2");
+
+    if (!networkReply->error()) {
+
+        QString response(networkReply->readAll());
+        SYD << tr("response: |%1|").arg(response);
+        _currentrest = response;
+
+    }
+    networkReply->deleteLater();
+}
+
+
+void MainWindow::slotError(QNetworkReply::NetworkError e) {
+
+    QString currenterror = QString("Error ocurred: %1").arg(e);
+
+    SYD << tr("Error network");
+    SYD << currenterror;
+
+    _currentrest = currenterror;
+
+}
+
+
+QString MainWindow::executeRest(const QString &url, const QString &name, const QString &pass) {
+    _currentrest = "";
+    QNetworkAccessManager *manager = new QNetworkAccessManager(this);
+
+    int nargs;
+    char** argv =NULL;
+    QCoreApplication myapp(nargs,argv);
+
+
+      QNetworkRequest request;
+
+       QUrl myurl(url);
+
+      //myurl.setUserName(name);
+      //myurl.setPassword(pass);
+      request.setUrl(myurl);
+
+      connect(manager, SIGNAL(finished(QNetworkReply*)),
+              this, SLOT(handleNetworkData(QNetworkReply*)));
+
+
+      //request.setRawHeader("User-Agent", "MyOwnBrowser 1.0");
+      QNetworkReply *reply = manager->get(QNetworkRequest(QUrl("http://127.0.0.1:8000")));
+      //QNetworkReply *reply = manager->get(request);
+
+//      connect(reply, SIGNAL(error(QNetworkReply::NetworkError)),
+//                this, SLOT(slotError(QNetworkReply::NetworkError)));
+
+      //QString result = _currentrest;
+      QString result = "....test1";
+      return result;
 
 }
 
@@ -8761,11 +8829,12 @@ void MainWindow::doSendSignDocument() {
 }
 
 
+
 bool MainWindow::executeParsed() {
 
 
-      if  (!commands.contains('f') ) {
-           if ( !commands.contains('h') && !commands.contains('V') && !commands.contains('T') ) {
+    if  (!commands.contains('f') ) {
+        if ( !commands.contains('h') && !commands.contains('V') && !commands.contains('T') ) {
                streamText << tr("*** No se especifico la ruta del archivo de flujo de trabajo (.xml) *** \n");
                streamText  <<  tr("Opcion: -f <archivo> o --file <archivo> \n");
                sendStreamToOutput();

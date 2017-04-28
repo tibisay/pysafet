@@ -756,12 +756,14 @@ SafetDocument SafetWorkflow::getDocuments(const QString& idvariable, QList<QSqlF
             case SafetWorkflow::JSON:
             SYD << tr("....SafetWorkflow::getDocuments...recorriendo..JSON");
                 str = mydocument.getJsonQuery(query,fields,tmphowmany,info);
-                SYD << tr("...1...returning str:|%1|")
+                SYD << tr("..**.1.(json)..returning str:|%1|")
                        .arg(str);
                 break;
         case SafetWorkflow::JSONARRAY:
                 SYD << tr("....SafetWorkflow::getDocuments...recorriendo..JSONARRAY");
             str = mydocument.getJsonArrayQuery(query,fields,tmphowmany,info);
+            SYD << tr("..**.1.(json_array)..returning str:|%1|")
+                   .arg(str);
             break;
             case SafetWorkflow::SVG:
                 break;
