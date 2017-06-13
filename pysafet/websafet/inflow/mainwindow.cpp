@@ -446,8 +446,9 @@ void MainWindow::handleNetworkData(QNetworkReply *networkReply)
     if (!networkReply->error()) {
 
         QString response(networkReply->readAll());
-        SYD << tr("response: |%1|").arg(response);
         _currentrest = response;
+        SYD << tr("response: |%1|").arg(response);
+
 
     }
     networkReply->deleteLater();
@@ -468,6 +469,9 @@ void MainWindow::slotError(QNetworkReply::NetworkError e) {
 
 QString MainWindow::executeRest(const QString &url, const QString &name, const QString &pass) {
     _currentrest = "";
+
+    SYD << tr("Executing Rest");
+
     QNetworkAccessManager *manager = new QNetworkAccessManager(this);
 
     int nargs;
@@ -479,8 +483,8 @@ QString MainWindow::executeRest(const QString &url, const QString &name, const Q
 
        QUrl myurl(url);
 
-      //myurl.setUserName(name);
-      //myurl.setPassword(pass);
+      myurl.setUserName(name);
+      myurl.setPassword(pass);
       request.setUrl(myurl);
 
       connect(manager, SIGNAL(finished(QNetworkReply*)),
@@ -488,11 +492,15 @@ QString MainWindow::executeRest(const QString &url, const QString &name, const Q
 
 
       //request.setRawHeader("User-Agent", "MyOwnBrowser 1.0");
-      QNetworkReply *reply = manager->get(QNetworkRequest(QUrl("http://127.0.0.1:8000")));
-      //QNetworkReply *reply = manager->get(request);
+      //QNetworkReply *reply = manager->get(QNetworkRequest(QUrl("http://127.0.0.1:8000")));
+      QNetworkReply *reply = manager->get(request);
 
-//      connect(reply, SIGNAL(error(QNetworkReply::NetworkError)),
-//                this, SLOT(slotError(QNetworkReply::NetworkError)));
+      QEventLoop loop;
+      connect(reply, SIGNAL(finished()), &loop, SLOT(quit()));
+      loop.exec();
+
+      connect(reply, SIGNAL(error(QNetworkReply::NetworkError)),
+                this, SLOT(slotError(QNetworkReply::NetworkError)));
 
       //QString result = _currentrest;
       QString result = "....test1";
@@ -4091,6 +4099,7 @@ QString  MainWindow::toInputForm(const QString& action,bool withpermises) {
        **/
      bool genjson = true;
 
+
      if (xml.indexOf("por_correo") > 0) {
          SYD  << tr("..............MainWindow::toInputForm....*****PORCORREO...enviarcorreo..OK!");
          SYD    << tr("MainWindow::evalConffileValues()...(IF2) CONFVALUE....MYNEWVALUE..SafetYAWL::getConf()[\"Email/template.1\"]:|%1|")
@@ -4167,6 +4176,63 @@ QString  MainWindow::toInputForm(const QString& action,bool withpermises) {
             genjson = false;
 
      }
+     else if (xml.indexOf("llamar_servicio_web") > 0) {
+          genjson = false;
+         SYD << tr("..............Llamando servicio Web");
+         results = parser.processXml(false,withpermises);
+         if ( results.count() == 0) {
+             SYE << tr("No se produjo el resultado esperado de la operación.");
+             return QString("");
+
+         }
+         ParsedSqlToData  data = SafetTextParser::parseSql(results.at(0),true);
+
+
+         SYD  << tr("..............MainWindow::llamar_servicio_web....results.at(0):|%1|")
+                 .arg(results.at(0));
+
+
+         SYD  << tr("..............MainWindow::cargar_flujo_de_trabajo....operationName():|%1|")
+                 .arg(parser.operationName());
+         SYD  << tr("..............MainWindow::cargar_flujo_de_trabajo....data.map.keys():|%1|")
+                 .arg(data.map.keys().count());
+
+         QString id = "0";
+         QString url = "";
+         QString pars = "";
+         QString credentials = "";
+
+         if (data.map.contains("id")) {
+             id = data.map["id"];
+         }
+
+
+
+         if (data.map.contains("url")) {
+             url = "http://" + data.map["url"];
+         }
+
+         if (data.map.contains("parameters")) {
+             pars = data.map[" parameters"];
+             pars = "admin:admin";
+         }
+
+         if (data.map.contains("credentials")) {
+             credentials = data.map[" credentials"];
+         }
+
+         _currentjson = QString("{   \"id\": \"%1\",  \"result\": \"%2\",  \"url\": \"%3\",  "
+                                "\"operation\": \"%4\",  \"parameters\": \"%5\",  \"credentials\": \"%6\" } ")
+              .arg(id)
+              .arg("true")
+              .arg(url)
+                 .arg(parser.operationName())
+                 .arg(pars)
+                 .arg(credentials);
+
+         executeRest(url,"admin", "admin");
+
+     }
      else if (xml.indexOf("cargar_flujo_de_trabajo") > 0) {
 
          SYD << tr("Cargar flujo de trabajo...1...");
@@ -4232,7 +4298,7 @@ QString  MainWindow::toInputForm(const QString& action,bool withpermises) {
      }
 
      if ( genjson ) {
-        _currentjson = QString("{ \"id\": \"%1\", \"result\": \"%2\" } ")
+        _currentjson = QString("{   \"id\": \"%1\",     \"result\": \"%2\" } ")
              .arg(parser.currId())
              .arg("true");
      }
