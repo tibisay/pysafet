@@ -447,7 +447,7 @@ void MainWindow::handleNetworkData(QNetworkReply *networkReply)
 
         QString response(networkReply->readAll());
         _currentrest = response;
-        SYD << tr("response: |%1|").arg(response);
+        SYD << tr("CALLING_REST_SERVICE....response: |%1|").arg(response);
 
 
     }
@@ -491,9 +491,15 @@ QString MainWindow::executeRest(const QString &url, const QString &name, const Q
               this, SLOT(handleNetworkData(QNetworkReply*)));
 
 
+      QUrl postData;
+      postData.addQueryItem("data1", "victorrbravo");
+      postData.addQueryItem("data2", "solazversole");
+
       //request.setRawHeader("User-Agent", "MyOwnBrowser 1.0");
       //QNetworkReply *reply = manager->get(QNetworkRequest(QUrl("http://127.0.0.1:8000")));
-      QNetworkReply *reply = manager->get(request);
+      request.setHeader(QNetworkRequest::ContentTypeHeader,
+          "application/x-www-form-urlencoded");
+      QNetworkReply *reply = manager->post(request, postData.encodedQuery());
 
       QEventLoop loop;
       connect(reply, SIGNAL(finished()), &loop, SLOT(quit()));
