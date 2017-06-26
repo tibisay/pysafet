@@ -4178,7 +4178,7 @@ QString  MainWindow::toInputForm(const QString& action,bool withpermises) {
      }
      else if (xml.indexOf("llamar_servicio_web") > 0) {
           genjson = false;
-         SYD << tr("..............Llamando servicio Web");
+
          results = parser.processXml(false,withpermises);
          if ( results.count() == 0) {
              SYE << tr("No se produjo el resultado esperado de la operación.");
@@ -4190,7 +4190,6 @@ QString  MainWindow::toInputForm(const QString& action,bool withpermises) {
 
          SYD  << tr("..............MainWindow::llamar_servicio_web....results.at(0):|%1|")
                  .arg(results.at(0));
-
 
          SYD  << tr("..............MainWindow::cargar_flujo_de_trabajo....operationName():|%1|")
                  .arg(parser.operationName());
@@ -4212,6 +4211,8 @@ QString  MainWindow::toInputForm(const QString& action,bool withpermises) {
              url = "http://" + data.map["url"];
          }
 
+
+
          if (data.map.contains("parameters")) {
              pars = data.map[" parameters"];
              pars = "admin:admin";
@@ -4220,6 +4221,9 @@ QString  MainWindow::toInputForm(const QString& action,bool withpermises) {
          if (data.map.contains("credentials")) {
              credentials = data.map[" credentials"];
          }
+
+         SYD << tr("CALLING_REST_SERVICE.......id:|%1|..url:|%2|..parameters:|%3|").arg(id).arg(url)
+                .arg(pars);
 
          _currentjson = QString("{   \"id\": \"%1\",  \"result\": \"%2\",  \"url\": \"%3\",  "
                                 "\"operation\": \"%4\",  \"parameters\": \"%5\",  \"credentials\": \"%6\" } ")
