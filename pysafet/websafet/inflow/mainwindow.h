@@ -929,7 +929,8 @@ public:
 
       QStringList generateTips(const QString &cs, const QString& parcialscript);
 
-      QString executeRest(const QString &url, const QString &name = "admin", const QString &pass = "admin");
+      QString executeRest(const QString &url, const QString &name = "admin", const QString &pass = "admin",
+              const QUrl& postData = QUrl());
 
 public Q_SLOTS: // Slots para el manejo de los servicios de Escritorio (QDesktopServices)
 

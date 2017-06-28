@@ -101,6 +101,11 @@
 #include "bdocdocument.h"
 #endif
 
+// ** JSON Files
+
+
+#include <QByteArray>
+#include <QFile>
 
 
 //#include "inflowfirmadoc.h"
@@ -108,9 +113,15 @@
 #include "../smtp/SmtpMime"
 #endif
 
+#include "qjson/parser.h"
+#include "qjson/serializer.h"
+
+
 #include "inflowfirmadoc.h"
 
 // **** Bdoc files
+
+
 
 
 
@@ -467,7 +478,7 @@ void MainWindow::slotError(QNetworkReply::NetworkError e) {
 }
 
 
-QString MainWindow::executeRest(const QString &url, const QString &name, const QString &pass) {
+QString MainWindow::executeRest(const QString &url, const QString &name, const QString &pass, const QUrl& postData) {
     _currentrest = "";
 
     SYD << tr("Executing Rest");
@@ -491,9 +502,6 @@ QString MainWindow::executeRest(const QString &url, const QString &name, const Q
               this, SLOT(handleNetworkData(QNetworkReply*)));
 
 
-      QUrl postData;
-      postData.addQueryItem("data1", "victorrbravo");
-      postData.addQueryItem("data2", "solazversole");
 
       //request.setRawHeader("User-Agent", "MyOwnBrowser 1.0");
       //QNetworkReply *reply = manager->get(QNetworkRequest(QUrl("http://127.0.0.1:8000")));
@@ -4194,14 +4202,6 @@ QString  MainWindow::toInputForm(const QString& action,bool withpermises) {
          ParsedSqlToData  data = SafetTextParser::parseSql(results.at(0),true);
 
 
-         SYD  << tr("..............MainWindow::llamar_servicio_web....results.at(0):|%1|")
-                 .arg(results.at(0));
-
-         SYD  << tr("..............MainWindow::cargar_flujo_de_trabajo....operationName():|%1|")
-                 .arg(parser.operationName());
-         SYD  << tr("..............MainWindow::cargar_flujo_de_trabajo....data.map.keys():|%1|")
-                 .arg(data.map.keys().count());
-
          QString id = "0";
          QString url = "";
          QString pars = "";
@@ -4228,8 +4228,62 @@ QString  MainWindow::toInputForm(const QString& action,bool withpermises) {
              credentials = data.map[" credentials"];
          }
 
-         SYD << tr("CALLING_REST_SERVICE.......id:|%1|..url:|%2|..parameters:|%3|").arg(id).arg(url)
+         SYD << tr("CALLING_REST_SERVICE.......id:|%1|..url:|%2|.............parameters:|%3|").arg(id).arg(url)
                 .arg(pars);
+         
+         QString mydataaction = parser.currentDataAction();
+
+         QString mycurrent = "";
+         QUrl postData;
+
+
+         if  (!mydataaction.isEmpty()) {
+
+             QString adjaction = mydataaction
+                     .arg(data.map["id"]);
+             bool result = toInputConsole(adjaction,false);
+
+             if (!result ) {
+                 SYE << tr("No se ejecuto la acción para el envio de correo");
+                 return QString("");
+
+             }
+
+             mycurrent = currentDATA();
+             SYD << tr("CALLING_REST_SERVICE....................CAADJDATA:|%1|")
+                    .arg(mycurrent);
+             // Parse document
+             // Parse document
+
+
+             // json is a QString containing the data to convert
+
+             QJson::Parser jsonparser;
+             bool ok;
+
+
+             QByteArray myjsonarray = mycurrent.toUtf8();
+             QVariantList jsonresult = jsonparser.parse(myjsonarray, &ok).toList();
+             SYD << tr("CALLING_REST_SERVICE.................ok:|%1|").arg(ok);
+
+             if (ok) {
+                  foreach(QVariant var, jsonresult) {
+                        QVariantMap mymap = var.toMap();
+                         SYD << tr("CALLING_REST_SERVICE.....VALUES...:");
+                           foreach( QString key, mymap.keys()) {
+                               SYD << tr("CALLING_REST_SERVICE... key:|%1|...value:|%2|:")
+                                      .arg(key)
+                                      .arg(mymap[key].toString());
+                                      postData.addQueryItem(key, mymap[key].toString());
+                            }
+
+                  }
+             }
+
+
+
+
+         }         
 
          _currentjson = QString("{   \"id\": \"%1\",  \"result\": \"%2\",  \"url\": \"%3\",  "
                                 "\"operation\": \"%4\",  \"parameters\": \"%5\",  \"credentials\": \"%6\" } ")
@@ -4240,7 +4294,7 @@ QString  MainWindow::toInputForm(const QString& action,bool withpermises) {
                  .arg(pars)
                  .arg(credentials);
 
-         executeRest(url,"admin", "admin");
+         executeRest(url,"admin", "admin", postData);
 
      }
      else if (xml.indexOf("cargar_flujo_de_trabajo") > 0) {

@@ -202,7 +202,7 @@ SOURCES += ../gsoap/stdsoap2.cpp \
 
 
 LIBS += -L/usr/local/lib \
-    -L../inflow 
+    -L../inflow  -lqjson
 contains( DEFINES, SAFET_GRAPHVIZ ) {
 LIBS += -L/usr/lib/graphviz
 }
