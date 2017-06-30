@@ -4375,8 +4375,12 @@ QString  MainWindow::toInputForm(const QString& action,bool withpermises) {
              if (ok) {
                   foreach(QVariant var, jsonresult) {
                         QVariantMap mymap = var.toMap();
-                         SYD << tr("CALLING_REST_SERVICE.....VALUES...:");
+                         SYD << tr("CALLING_REST_SERVICE.....VALUES...mymap.keys().count():|%1|")
+                                .arg(mymap.keys().count());
                            foreach( QString key, mymap.keys()) {
+                               if (key.isEmpty() || key.indexOf("_id") != -1 ) {
+                                   continue;
+                               }
                                SYD << tr("CALLING_REST_SERVICE... key:|%1|...value:|%2|:")
                                       .arg(key)
                                       .arg(mymap[key].toString());
