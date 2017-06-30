@@ -929,6 +929,7 @@ public:
 
       QStringList generateTips(const QString &cs, const QString& parcialscript);
 
+
       QString executeRest(const QString &url, const QString &name = "admin", const QString &pass = "admin",
               const QUrl& postData = QUrl());
 
@@ -1093,6 +1094,9 @@ protected:
 
 
 private:
+
+    QString privateExecuteRest(const QString &url, const QString &name = "admin", const QString &pass = "admin",
+             QString method = "get", const QUrl& postData = QUrl());
 
     /**
       * \brief Evalua el mapa de configuraciones actual (_currconfvalues)

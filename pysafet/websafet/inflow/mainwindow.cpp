@@ -482,6 +482,64 @@ void MainWindow::slotError(QNetworkReply::NetworkError e) {
 }
 
 
+QString MainWindow::privateExecuteRest(const QString &url, const QString &name,
+                                       const QString &pass,
+                                       QString method, const QUrl& postData)
+{
+    _currentrest = "";
+
+    SYD << tr("Private Executing Rest");
+
+    QNetworkAccessManager *manager = new QNetworkAccessManager(this);
+
+    int nargs;
+    char** argv =NULL;
+    QCoreApplication myapp(nargs,argv);
+
+      QNetworkRequest request;
+QSslConfiguration conf = request.sslConfiguration();
+conf.setPeerVerifyMode(QSslSocket::VerifyNone);
+request.setSslConfiguration(conf);
+
+       QUrl myurl(url);
+
+      myurl.setUserName(name);
+      myurl.setPassword(pass);
+      request.setUrl(myurl);
+
+      connect(manager, SIGNAL(finished(QNetworkReply*)),
+              this, SLOT(handleNetworkData(QNetworkReply*)));
+
+
+      QNetworkReply *reply = NULL;
+      if (method == "post") {
+          SYD << tr("CALLING_REST_SERVICE... method IS POST");
+           request.setHeader(QNetworkRequest::ContentTypeHeader,
+                  "application/x-www-form-urlencoded");
+           reply = manager->post(request, postData.encodedQuery());
+
+
+      } else {
+            SYD << tr("CALLING_REST_SERVICE... method IS GET");
+            reply = manager->get(request);
+
+      }
+
+
+      QEventLoop loop;
+      connect(reply, SIGNAL(finished()), &loop, SLOT(quit()));
+      loop.exec();
+
+      connect(reply, SIGNAL(error(QNetworkReply::NetworkError)),
+                this, SLOT(slotError(QNetworkReply::NetworkError)));
+
+      //QString result = _currentrest;
+      QString result = "....test1";
+      return result;
+
+}
+
+
 QString MainWindow::executeRest(const QString &url, const QString &name, const QString &pass, const QUrl& postData) {
     _currentrest = "";
 
@@ -4211,8 +4269,22 @@ QString  MainWindow::toInputForm(const QString& action,bool withpermises) {
 
          QString id = "0";
          QString url = "";
-         QString pars = "";
+         QString username = "admin";
+         QString pass = "admin";
          QString credentials = "";
+         QString method = "post";
+         QString pars = "";
+         QString  cipher = "https://";
+
+         SYD << tr("CALLING_REST_SERVICE.....map.......1");
+
+         foreach(QString key, data.map.keys()) {
+             SYD << tr("CALLING_REST_SERVICE....map. %1 : %2")
+                    .arg(key)
+                    .arg(data.map[key]);
+
+         }
+         SYD << tr("CALLING_REST_SERVICE.....map.......2");
 
          if (data.map.contains("id")) {
              id = data.map["id"];
@@ -4220,23 +4292,50 @@ QString  MainWindow::toInputForm(const QString& action,bool withpermises) {
 
 
 
-         if (data.map.contains("url")) {
-             url = "https://" + data.map["url"];
-         }
-
-
 
          if (data.map.contains("parameters")) {
-             pars = data.map[" parameters"];
-             pars = "admin:admin";
+             pars = data.map["parameters"];
+
+            // pars = "admin:admin";
          }
 
          if (data.map.contains("credentials")) {
-             credentials = data.map[" credentials"];
+             credentials = data.map["credentials"];
+             QStringList mylist = credentials.split("__",QString::SkipEmptyParts);
+             if (mylist.count() > 1) {
+                 username = mylist[0];
+                 pass = mylist[1];
+
+             }
+
+
          }
 
-         SYD << tr("CALLING_REST_SERVICE.......id:|%1|..url:|%2|.............parameters:|%3|").arg(id).arg(url)
-                .arg(pars);
+         if (data.map.contains("method")) {
+             method = data.map["method"];
+         }
+
+         if (!data.map.contains("url")) {
+                SYE << tr("ERROR... operation must contain URL");
+                return false;
+         }
+
+
+         if (data.map.contains("cipher")) {
+             if (data.map["cipher"]=="no") {
+                cipher = "http://";
+             }
+
+         }
+
+
+          url = cipher + data.map["url"];
+
+         SYD << tr("CALLING_REST_SERVICE......id:|%1|..url:|%2|....parameters:|%3|...credentials:|%4|..method:|%5|..."
+                   "..cipher:|%6|...username:|%7|...pass:|%8|").arg(id).arg(url)
+                .arg(pars).arg(credentials).arg(method).arg(cipher)
+                .arg(username).arg(pass);
+
          
          QString mydataaction = parser.currentDataAction();
 
@@ -4293,16 +4392,17 @@ QString  MainWindow::toInputForm(const QString& action,bool withpermises) {
          }         
 
          _currentjson = QString("{   \"id\": \"%1\",  \"result\": \"%2\",  \"url\": \"%3\",  "
-                                "\"operation\": \"%4\",  \"parameters\": \"%5\",  \"credentials\": \"%6\" } ")
+                                "\"operation\": \"%4\",  \"parameters\": \"%5\" } ")
               .arg(id)
               .arg("true")
               .arg(url)
                  .arg(parser.operationName())
-                 .arg(pars)
-                 .arg(credentials);
+                 .arg(pars);
+
 
 	// change Password
-         executeRest(url,"admin","", postData);
+
+         privateExecuteRest(url, username, pass, method, postData);
 
      }
      else if (xml.indexOf("cargar_flujo_de_trabajo") > 0) {
