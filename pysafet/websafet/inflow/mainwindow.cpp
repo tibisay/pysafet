@@ -59,7 +59,7 @@
 #endif
 
 
-
+#include <QSslConfiguration>
 
 #include <getopt.h>
 #include "mainwindow.h"
@@ -461,7 +461,11 @@ void MainWindow::handleNetworkData(QNetworkReply *networkReply)
         SYD << tr("CALLING_REST_SERVICE....response: |%1|").arg(response);
 
 
-    }
+     } else {
+	SYD << tr("CALLING Network error: %1").arg(networkReply->errorString()); 
+}
+
+
     networkReply->deleteLater();
 }
 
@@ -489,8 +493,10 @@ QString MainWindow::executeRest(const QString &url, const QString &name, const Q
     char** argv =NULL;
     QCoreApplication myapp(nargs,argv);
 
-
       QNetworkRequest request;
+QSslConfiguration conf = request.sslConfiguration();
+conf.setPeerVerifyMode(QSslSocket::VerifyNone);
+request.setSslConfiguration(conf);
 
        QUrl myurl(url);
 
@@ -505,9 +511,10 @@ QString MainWindow::executeRest(const QString &url, const QString &name, const Q
 
       //request.setRawHeader("User-Agent", "MyOwnBrowser 1.0");
       //QNetworkReply *reply = manager->get(QNetworkRequest(QUrl("http://127.0.0.1:8000")));
-      request.setHeader(QNetworkRequest::ContentTypeHeader,
-          "application/x-www-form-urlencoded");
-      QNetworkReply *reply = manager->post(request, postData.encodedQuery());
+     // request.setHeader(QNetworkRequest::ContentTypeHeader,
+       //   "application/x-www-form-urlencoded");
+      //QNetworkReply *reply = manager->post(request, postData.encodedQuery());
+      QNetworkReply *reply = manager->get(request);
 
       QEventLoop loop;
       connect(reply, SIGNAL(finished()), &loop, SLOT(quit()));
@@ -4214,7 +4221,7 @@ QString  MainWindow::toInputForm(const QString& action,bool withpermises) {
 
 
          if (data.map.contains("url")) {
-             url = "http://" + data.map["url"];
+             url = "https://" + data.map["url"];
          }
 
 
@@ -4294,7 +4301,8 @@ QString  MainWindow::toInputForm(const QString& action,bool withpermises) {
                  .arg(pars)
                  .arg(credentials);
 
-         executeRest(url,"admin", "admin", postData);
+	// change Password
+         executeRest(url,"admin","", postData);
 
      }
      else if (xml.indexOf("cargar_flujo_de_trabajo") > 0) {
