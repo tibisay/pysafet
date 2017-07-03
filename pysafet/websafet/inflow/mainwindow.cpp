@@ -4412,8 +4412,14 @@ QString  MainWindow::toInputForm(const QString& action,bool withpermises) {
 
 	// change Password
          SYD << tr("CALLING_REST_SERVICE.................postDatas count:|%1|").arg(postDatas.count());
-         foreach (QUrl postData, postDatas) {
-            privateExecuteRest(url, username, pass, method, postData);
+         if (method== "get" || postDatas.count() == 0 ) {
+             SYD << tr("CALLING_REST_SERVICE................oneGET");
+             privateExecuteRest(url, username, pass, method, QUrl());
+         }
+         else {
+             foreach (QUrl postData, postDatas) {
+                privateExecuteRest(url, username, pass, method, postData);
+             }
          }
 
 
