@@ -4340,7 +4340,7 @@ QString  MainWindow::toInputForm(const QString& action,bool withpermises) {
          QString mydataaction = parser.currentDataAction();
 
          QString mycurrent = "";
-         QUrl postData;
+         QList<QUrl> postDatas;
 
 
          if  (!mydataaction.isEmpty()) {
@@ -4373,20 +4373,26 @@ QString  MainWindow::toInputForm(const QString& action,bool withpermises) {
              SYD << tr("CALLING_REST_SERVICE.................ok:|%1|").arg(ok);
 
              if (ok) {
+                  for(int i=0; i < jsonresult.count(); i++) {
+                               postDatas.append(QUrl());
+                  }
+                  int i = 0;
+                  SYD << tr("CALLING_REST_SERVICE.................jsonresult count:|%1|").arg(jsonresult.count());
                   foreach(QVariant var, jsonresult) {
+
                         QVariantMap mymap = var.toMap();
                          SYD << tr("CALLING_REST_SERVICE.....VALUES...mymap.keys().count():|%1|")
                                 .arg(mymap.keys().count());
                            foreach( QString key, mymap.keys()) {
-                               if (key.isEmpty() || key.indexOf("_id") != -1 ) {
+                               if (key.isEmpty() || key.indexOf("id") != -1 ) {
                                    continue;
                                }
                                SYD << tr("CALLING_REST_SERVICE... key:|%1|...value:|%2|:")
                                       .arg(key)
                                       .arg(mymap[key].toString());
-                                      postData.addQueryItem(key, mymap[key].toString());
-                            }
-
+                                      postDatas[i].addQueryItem(key, mymap[key].toString());
+                            }                           
+                            i++;
                   }
              }
 
@@ -4405,8 +4411,11 @@ QString  MainWindow::toInputForm(const QString& action,bool withpermises) {
 
 
 	// change Password
+         SYD << tr("CALLING_REST_SERVICE.................postDatas count:|%1|").arg(postDatas.count());
+         foreach (QUrl postData, postDatas) {
+            privateExecuteRest(url, username, pass, method, postData);
+         }
 
-         privateExecuteRest(url, username, pass, method, postData);
 
      }
      else if (xml.indexOf("cargar_flujo_de_trabajo") > 0) {
