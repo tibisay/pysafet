@@ -163,6 +163,7 @@ QString DateTimeWidget::html() {
 
     if (hasposition) {
 
+        QString mycaption = newcaption.replace(QRegExp("_+")," ");
         if ( posaction == 1 || posaction ==  3 ) {
             result += "\n<br/>\n";
             result += "\n<div class=\"row clearfix\">\n";
@@ -171,16 +172,18 @@ QString DateTimeWidget::html() {
          result += QString("<div class=\"col-%1 column\">\n%2\n")
                  .arg(poscol)
                  .arg((removelabel?"":QString("<label  for=\"%1\" class=\"col-md-3 control-label\"> %2 </label>\n")
-                                   .arg(_caption).arg(newcaption.replace("_"," "))));
+                                   .arg(_caption).arg(mycaption)));
 
     }
     else {
+        QString mycaption = newcaption.replace(QRegExp("_+")," ");
         result +=  "<div class=\"form-group\" >\n";
         result += QString("%1\n")
                 .arg((removelabel?"":QString(
                                       "<label for=\"%1\" class=\"col-md-3 control-label\">%2</label>\n")
                                   .arg(_caption)
-                                  .arg(newcaption.replace("_"," "))));
+                                  .arg(mycaption)));
+
     }
 
 

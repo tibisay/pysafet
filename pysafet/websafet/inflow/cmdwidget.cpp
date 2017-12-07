@@ -343,6 +343,7 @@ QString CmdWidget::html() {
                     result += "\n<div class=\"row clearfix\">\n";
                 }
 
+                QString mycaption = newcaption.replace(QRegExp("_+")," ");
                  result += QString(""
                                "<div class=\"col-%1 column \">\n"
                                 "%2\n"
@@ -350,7 +351,7 @@ QString CmdWidget::html() {
                                "</div>\n")
                             .arg(poscol)
                             .arg((removelabel?"":QString("<label  class=\"col-md-2 control-label\">%2</label>\n")
-                                              .arg(_caption.replace("_"," ")).arg(newcaption)))
+                                              .arg(_caption.replace("_"," ")).arg(mycaption)))
                             .arg(radiohtml);
 
 
@@ -465,6 +466,7 @@ QString CmdWidget::html() {
                 SYD << tr("...READONLY:|%1|")
                        .arg(readonly);
 
+                QString mycaption = newcaption.replace(QRegExp("_+")," ");
                  result += QString(""
                                "<div class=\"col-%4 column \">\n"
                                 "%6\n"
@@ -476,7 +478,7 @@ QString CmdWidget::html() {
                             .arg(poscol)
                             .arg(readonly)
                             .arg((removelabel?"":QString("<label for=\"%1\" class=\"col-md-2 control-label\">%2</label>\n")
-                                              .arg(_caption).arg(newcaption)));
+                                              .arg(_caption).arg(mycaption)));
 
 
 
@@ -487,6 +489,7 @@ QString CmdWidget::html() {
 
         } else {
 
+            QString mycaption = newcaption.replace(QRegExp("_+")," ");
                 result +=
                 QString(""
                           "<div class=\"form-group\" >"
@@ -498,7 +501,7 @@ QString CmdWidget::html() {
                 .arg(_caption)
                 .arg(_typeinput)
                 .arg(mydesc.isEmpty()?"":QString("placeholder=\"%1\"").arg(mydesc))
-                .arg(newcaption.replace("_"," "))
+                .arg(mycaption)
                 .arg(readonly);
 
         }

@@ -1284,16 +1284,19 @@ QString ComboWidget::html() {
             result += "\n<br/>\n";
             result += "\n<div class=\"row clearfix\">\n";
         }
-
+        QString mycaption = newcaption.replace(QRegExp("_+")," ");
          result += QString("<div class=\"col-%1 column\">\n%2\n")
                  .arg(poscol)
-                 .arg((removelabel?"":QString("<label for=\"%1\" class=\"col-md-3 control-label\">%2</label>\n").arg(_caption).arg(newcaption)));
+                 .arg((removelabel?"":QString("<label for=\"%1\" class=\"col-md-3 control-label\">%2</label>\n")
+                                   .arg(_caption).arg(mycaption)));
 
     }
     else {
         result +=  "<div class=\"form-group\" >\n";
+        QString mycaption = newcaption.replace(QRegExp("_+")," ");
         result += QString("%1\n")
-                .arg((removelabel?"":QString("<label for=\"%1\" class=\"col-md-3 control-label\">%2</label>\n").arg(_caption).arg(newcaption)));
+                .arg((removelabel?"":QString("<label for=\"%1\" class=\"col-md-3 control-label\">%2</label>\n")
+                                  .arg(_caption).arg(mycaption)));
     }
 
 
