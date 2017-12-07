@@ -101,6 +101,8 @@ QString TextEditWidget::html() {
 
 
     if (iswiki ) {
+
+        QString mycaption = newcaption.replace(QRegExp("_+")," ");
         result =  QString(
 
                     "<div class=\"form-group\" >\n"
@@ -119,13 +121,15 @@ QString TextEditWidget::html() {
                     "</div>\n"
                 )
                 .arg(caption())
-                .arg((removelabel?"":QString("<label for=\"%1\" class=\"col-md-2 control-label\">%2</label>\n").arg(caption()).arg(newcaption)) );
+                .arg((removelabel?"":QString("<label for=\"%1\" class=\"col-md-2 control-label\">%2</label>\n")
+                                  .arg(caption()).arg(mycaption)) );
 
 
     }
 
     else {
 
+        QString mycaption = newcaption.replace(QRegExp("_+")," ");
         result =
            QString(""
 
@@ -140,7 +144,8 @@ QString TextEditWidget::html() {
                    )
                 .arg(caption())
                 .arg(mydesc.isEmpty()?"":QString("placeholder=\"%1\"").arg(mydesc))
-                .arg((removelabel?"":QString("<label for=\"%1\" class=\"col-md-2 control-label\">%2</label><br/>").arg(caption()).arg(newcaption)) );
+                .arg((removelabel?"":QString("<label for=\"%1\" class=\"col-md-2 control-label\">%2</label><br/>")
+                                  .arg(caption()).arg(mycaption)) );
 
           result += QString(""
                           "<script>"
