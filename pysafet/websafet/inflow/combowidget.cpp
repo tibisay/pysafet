@@ -1305,33 +1305,28 @@ QString ComboWidget::html() {
                 .arg(caption());
    }
    else {
+	result += 
+	"<link href=\"https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.6-rc.0/css/select2.min.css\" rel=\"stylesheet\" />\n"
+	"<script src=\"https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.6-rc.0/js/select2.min.js\"></script>\n"
+	"<script src=\"http://maxcdn.bootstrapcdn.com/bootstrap/2.3.2/js/bootstrap.min.js\"></script>\n";
+
+
+       result += "<script>"
+	"$(document).ready(function() {\n"
+	"    $('.js-example-basic-single').select2();\n"
+	"});\n\n"
+	"</script>\n";
 
 
        result += ""
-      "<link rel=\"stylesheet\" href=\"/static/css/style_select.css\" />"
-
-       "<script src=\"http://maxcdn.bootstrapcdn.com/bootstrap/2.3.2/js/bootstrap.min.js\"></script>\n"
-       "<script src=\"https://ajax.googleapis.com/ajax/libs/angularjs/1.4.3/angular.min.js\"></script>\n"
-       "<script src=\"/static/js/customSelect.js\"></script>\n"
-               "<body ng-app=\"Demo\">\n"
-                   "<div class=\"container\" ng-controller=\"DemoController\">\n"
-
-               ;
+	"<link rel=\"stylesheet\" href=\"/static/css/style_select.css\" />\n";
 
       result += QString(
-                  ""
-                  "<input type=\"hidden\" name=\"%2\" id=\"%2\" />\n"
-                  "<div custom-select=\"g.name for g in nestedItemsLevel1 | filter: $searchTerm\""
-       " custom-select-options=\"level1Options\" ng-model= \"level1\" "
-       " id=\"%1\" name=\"%1\">\n</div>\n"
-                        "</div>")
-              .arg("__"+caption())
-              .arg("id")
-               ;
+       ""
+       "<select class=\"js-example-basic-single\" "
+       " id=\"%1\" name=\"id\">\n")
+              .arg("id");
 
-//    result += QString("<input type=\"text\" list=\"%2list\" name=\"%1\" id=\"%1\" class=\"form-control\"  ")
-//            .arg(caption())
-//            .arg(mypreffix);
    }
 
     bool isenables = myenables.count() > 0 ;
@@ -1340,37 +1335,16 @@ QString ComboWidget::html() {
                 .arg(mypreffix);
     }
 
-    if (caption()!="id") {
 
-        result += ">\n";
-    } else {
-        // result += "/>\n";
-         //result += QString("<input type=\"hidden\" name=\"%1-hidden\" id=\"%1-hidden\""
-         //                  "class=\"form-control\"  />")
-         //        .arg(caption())
-         //        .arg(mypreffix);
+     result += ">\n";
+     result += QLatin1String("<option value=\"\"></option>\n");
 
-    }
-    if (caption()!="id") {
-            result += QLatin1String("<option value=\"\"></option>");
-    } else {
-        result +=
-          "<script>\n"
-          "(function () { var app = angular.module('Demo', ['AxelSoft']);\n"
-
-          "app.controller('DemoController', ['$scope', '$timeout', '$q', function ($scope, $timeout, $q) {\n"
-
-          "$scope.nestedItemsLevel1 = [ \n";
-
-
-    }
     foreach(QString s, options()){
         if (!s.trimmed().isEmpty()) {
 
         QString newitem;
-        if (caption()!="id") {
                 if (s.length() >= shlen) {
-                newitem = QString("<option value=\"%2\" title=\"%3\">%1</option>\n")
+                  newitem = QString("<option value=\"%2\" title=\"%3\">%1</option>\n")
                         .arg(SafetYAWL::shrinkSentence(s,shlen))
                         .arg(getRealValue(s))
                         .arg(s);
@@ -1381,44 +1355,31 @@ QString ComboWidget::html() {
                             .arg(getRealValue(s));
                 }
 
-        } else {
-                    newitem = QString(""
-                         "{ id: '%2', name: '%1' },\n"
-                                      )
-                            .arg(s)
-                            .arg(getRealValue(s));
-
-
-//                    newitem = QString("<option value=\"%2\" title=\"%3\">%1</option>\n")
-//                            .arg(s)
-//                            .arg(getRealValue(s))
-//                            .arg(s);
-        }
             result += newitem;
         }
     }
+
 
 if (caption()!="id") {
     result += QLatin1String("</select>");
 }
 else {
-    result += QString("\n"
-            "];\n\n"
-            "$scope.level1 = $scope.nestedItemsLevel1[0];\n"
-                   "$scope.level1Options = {\n"
-                       "onSelect: function (item) {\n"
-                           "var items = [];\n"
-                            "console.log('(1)........selecting...: ' + item.id);\n"
-                            "$('#id').val(item.id);\n"
-                            "doChangeForid(item.id);\n"
-                            "console.log('(2)........selecting...: ' + item.id);\n"
-                       "}\n"
-                   "};\n"
-               "}]);\n                "
-           "})()\n;"
-       "</script>\n");
-    //result += QLatin1String("</datalist>");
+    result += QString("</select>");
+
+    result += "\n\n<script>\n";
+    result += QString("$('#id').on('select2:select', function (e) {\n"
+   "console.log(\"selecting...1\");\n"
+   " var data = e.params.data;\n"
+   " var currentId = e.params.data.id;\n"
+   " console.log(\"CurrentId:\" + currentId);\n"
+   " doChangeForid(currentId);\n"
+   "});\n");
+
+    result += "\n</script>\n";
+
+
 }
+    
     if (hasloading) {
 
         result += QString("\n<div id='divForLoading_%1' name='divForLoading_%1' style='TEXT-ALIGN: center;display: none;'>"
