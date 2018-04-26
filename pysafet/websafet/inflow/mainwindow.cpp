@@ -1655,18 +1655,32 @@ QString MainWindow::generateFormHead(const QString& o) {
     QString modname = purls.at(0);
     int npos = purl.indexOf(":");
     purl = purl.mid(npos+1);
-    DomModel* mymodel = new DomModel(inputPath(),NULL);
+
+    QString inputpath = inputPath();
+    SYD << tr("generateFormHead: CHECK_INPUT...1 inputPath: |%1|")
+           .arg(inputpath);
+    if (inputpath.isEmpty()) {
+        inputpath = "/home/weetup/.safet/input/deftrac.xml";
+    }
+
+    SYD << tr("generateFormHead: CHECK_INPUT...2 inputPath: |%1|")
+           .arg(inputpath);
+
+
+
+    DomModel* mymodel = new DomModel(inputpath,NULL);
+
     Q_CHECK_PTR( mymodel );
 
-    //QString myflowname = "/home/vbravo/.safet/flowfiles/flujogeneralPorHitoYPropietario.xml";
-    SYD << tr("generateFormHead: purl: %1")
+    SYD << tr("generateFormHead...CHECK_INPUT...2: purl: %1")
            .arg(newo);
     QStringList  keymodifyfields = mymodel->fieldsWithAttr(purl);
-    SYD << tr("generateFormHead: operacion: %1")
-           .arg(newo);
+    SYD << tr("generateFormHead: keymodifyfields.count(): %1")
+           .arg(keymodifyfields.count());
 
     QString result = "";
 
+    SYD << tr("generateFormHead...CHECK_INPUT..3");
     result = result + QString("\n");
 
 /*      result += QString("\n"
@@ -2146,8 +2160,16 @@ QString MainWindow::generateModifyHTML(const QString& operation, const QString& 
            .arg(fieldname)
            .arg(key);
 
+    QString inputpath = inputPath();
 
-    DomModel* mymodel = new DomModel(inputPath(),NULL);
+    SYD << tr("MainWindow::generateModifyHTML..1..CHECK_INPUT:|%1|...").arg(inputpath);
+
+    if (inputpath.isEmpty()) {
+        inputpath = "/home/weetup/.safet/input/deftrac.xml";
+    }
+
+    SYD << tr("MainWindow::generateModifyHTML..2..CHECK_INPUT:|%1|...").arg(inputpath);
+    DomModel* mymodel = new DomModel(inputpath,NULL);
     Q_CHECK_PTR( mymodel );
     QStringList mylist;
     SYD
@@ -2436,6 +2458,8 @@ QString MainWindow::menuForm(const QString& o, bool forwidget, const QString& fi
 
     SYD << tr(".................MainWindow::menuForm......MENUFORM(1).......forwidget:|%1|")
            .arg(forwidget);
+    SYD << tr("(1)...MainWindow::menuForm...menuForm....MENUFORM(1)...**SafetYAWL::inputPath():|%1|")
+           .arg(inputPath());
     QString result;
     QString purl = o;
     purl = purl.section("/",-1);
@@ -2467,7 +2491,7 @@ QString MainWindow::menuForm(const QString& o, bool forwidget, const QString& fi
                    "class=\"signin\" method=\"post\"  enctype=\"multipart/form-data\">\n")
                 .arg(hostURL() + "/" + formurl);
 
-    SYD << tr("(1)...MainWindow::menuForm...menuForm....SafetYAWL::inputPath():|%1|")
+    SYD << tr("(1)...MainWindow::menuForm...menuForm...MENUFORM(1).**SafetYAWL::inputPath():|%1|")
            .arg(inputPath());
 
     DomModel* mymodel = NULL;
@@ -2513,7 +2537,16 @@ QString MainWindow::menuForm(const QString& o, bool forwidget, const QString& fi
     SYD << tr("..............MainWindow::menuForm...defaultfields.count():|%1|")
            .arg(defaultfields.count());
 
-    mymodel = new DomModel(inputPath(),NULL);
+    QString inputpath = inputPath();
+
+    SYD << tr("1...............MainWindow::menuForm CHECK_INPUT....inputpath:%1").arg(inputpath);
+    if (inputpath.isEmpty()) {
+        SYD << tr("2...............MainWindow::menuForm CHECK_INPUT....inputpath:%1").arg(inputpath);
+        inputpath = "/home/weetup/.safet/input/deftrac.xml";
+    }
+    SYD << tr("3...............MainWindow::menuForm CHECK_INPUT....inputpath:%1").arg(inputpath);
+    mymodel = new DomModel(inputpath,NULL);
+    SYD << tr("4...............MainWindow::menuForm CHECK_INPUT....inputpath:%1").arg(inputpath);
 
     Q_CHECK_PTR( mymodel );
 

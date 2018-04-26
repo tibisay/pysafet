@@ -1299,27 +1299,28 @@ QString ComboWidget::html() {
                                   .arg(_caption).arg(mycaption)));
     }
 
-
-   if (caption()!="id") {
-       result += QString("<select name=\"%1\" id=\"%1\" class=\"form-control\"  ")
-                .arg(caption());
-   }
-   else {
-	result += 
-	"<link href=\"https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.6-rc.0/css/select2.min.css\" rel=\"stylesheet\" />\n"
-	"<script src=\"https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.6-rc.0/js/select2.min.js\"></script>\n"
-	"<script src=\"http://maxcdn.bootstrapcdn.com/bootstrap/2.3.2/js/bootstrap.min.js\"></script>\n";
+    result +=
+    "<link href=\"https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.6-rc.0/css/select2.min.css\" rel=\"stylesheet\" />\n"
+    "<script src=\"https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.6-rc.0/js/select2.min.js\"></script>\n"
+    "<script src=\"http://maxcdn.bootstrapcdn.com/bootstrap/2.3.2/js/bootstrap.min.js\"></script>\n";
 
 
        result += "<script>"
-	"$(document).ready(function() {\n"
-	"    $('.js-example-basic-single').select2();\n"
-	"});\n\n"
-	"</script>\n";
+    "$(document).ready(function() {\n"
+    "    $('.js-example-basic-single').select2();\n"
+    "});\n\n"
+    "</script>\n";
 
 
        result += ""
-	"<link rel=\"stylesheet\" href=\"/static/css/style_select.css\" />\n";
+    "<link rel=\"stylesheet\" href=\"/static/css/style_select.css\" />\n";
+
+
+   if (caption()!="id") {
+       result += QString("<select  class=\"js-example-basic-single\"  name=\"%1\" id=\"%1\" class=\"form-control\"  ")
+                .arg(caption());
+   }
+   else {
 
       result += QString(
        ""
