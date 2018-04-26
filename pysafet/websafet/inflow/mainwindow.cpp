@@ -1852,15 +1852,24 @@ QString MainWindow::generateFormHead(const QString& o) {
                              "               $(\"#\"+myname).html(myvalue);\n"
                              "               if ( $(\"#\"+myname).is(\"input\") ) {\n "
                              "                 document.getElementById(myname).value = myvalue; \n   "
-
+                                            "console.log('selecting...2');\n"
                              "               }                                     \n "
-                             "               else {                                 \n"
+                            "           else if ( $(\"#\"+myname).is(\"select\") ) {\n "
+                                                "console.log('selecting...1' + myname + ' ' + myvalue );\n"
+                             "                     $('#'+myname).val(myvalue).trigger('change');          \n"
+                             "         }  else {                                 \n"
                              "                  console.log(\"PUTTING myname:\"+myname); \n"
                              "                  console.log(\"PUTTING myvalue:\"+myvalue); \n"
                              "                 $(\"#\"+myname).html(myvalue);\n     \n"
                              "               }                                      \n"
                              "          } else {"
+                             "                if ( $(\"#\"+myname).is(\"select\") ) {\n "
+                                                 "console.log('selecting...*1' + myname + ' ' + myvalue );\n"
+                              "                     $('#'+myname).val(myvalue).trigger('change');          \n"
+                                 "                 } else {             \n"
+                                 "console.log('selecting...3');\n"
                              "                  document.getElementById(myname).value = myvalue;\n"
+                                 "          }\n"
                              "          }\n"
                              "      } else {\n"
                                    "}\n"
@@ -1893,13 +1902,13 @@ QString MainWindow::generateFormHead(const QString& o) {
                                             "}\n"
                              "          }\n"
                              "     }\n"
-
+                             "        $('#divForLoading').hide();\n          "
                              "   }\n"
                              " });\n\n"
 
                                          "%5"
-                             "       $(\"#divForLoading\").hide();\n"
-                             "         console.log(\"saliendo...\");\n"
+                             "      // $(\"#divForLoading\").hide();\n"
+                             "         console.log(\"***saliendo...\");\n"
 
                              "}\n"
 
@@ -2026,7 +2035,7 @@ QString MainWindow::generateFormHead(const QString& o) {
                           "}\n"
                                       "%5"
                           "   $(\"#divForLoading\").hide();\n"
-                          "     console.log(\"saliendo...\");\n"
+                          "     console.log(\"Head..saliendo...\");\n"
 
                           " });\n"
 

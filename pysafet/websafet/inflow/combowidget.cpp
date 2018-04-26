@@ -1277,6 +1277,19 @@ QString ComboWidget::html() {
         }
     }
 
+    if (hasloading) {
+
+        QString hostURL = "/weetup";
+
+        //result += QString("\n<div id='divForLoading_%1' name='divForLoading_%1' style='TEXT-ALIGN: center;display: none;'>"
+        result += QString("\n<div id='divForLoading' name='divForLoading' style='TEXT-ALIGN: center;display: none;'>"
+        "<b>Cargando...</b>"
+        "<img alt='LOADING' height='25' src='%1/static/loader.gif' width='25'/>"
+        "</div>\n")
+                .arg(hostURL);
+
+    }
+
 
     if (hasposition) {
 
@@ -1381,16 +1394,6 @@ else {
 
 }
     
-    if (hasloading) {
-
-        result += QString("\n<div id='divForLoading_%1' name='divForLoading_%1' style='TEXT-ALIGN: center;display: none;'>"
-        "<b>Cargando...</b>"
-        "<img alt='LOADING' height='25' src='/static/loader.gif' width='25'/>"
-        "</div>\n")
-                .arg(caption());
-
-
-    }
 
 
     result += QLatin1String("</div>");
